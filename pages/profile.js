@@ -1,14 +1,14 @@
 import Head from "next/head";
 
-export default function Home() {
+export default function Profile() {
   return (
     <div>
       <Head>
-        <title>E-shop Homepage</title>
+        <title>E-shop Profile Page</title>
         <meta name="description" content="E-shop e-commerce webpage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      hello
+      Profile
     </div>
   );
 }

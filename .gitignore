@@ -12,6 +12,9 @@
 /.next/
 /out/
 
+#api key inside
+next.config.js
+
 # production
 /build
 

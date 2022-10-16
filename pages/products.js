@@ -1,0 +1,177 @@
+import { useEffect, useState } from "react";
+import ProductCard from "../components/ProductCard";
+import SearchBar from "../components/SearchBar";
+import SelectMenu from "../components/SelectMenu";
+import { useProductData } from "../context/ProductDataContext";
+import { useShoppingCart } from "../context/ShoppingCartContext";
+
+export default function Products({ prodData }) {
+  const { changeUser } = useShoppingCart();
+  const [displayProducts, setDisplayProducts] = useState();
+  const [initialProducts, setInitialProducts] = useState();
+  const [currentCategory, setCurrentCategory] = useState("All Products");
+  const [currentOrder, setCurrentOrder] = useState("");
+
+  useEffect(() => {
+    if (prodData) {
+      let prod = prodData.map((product) => {
+        return { ...product, displayElement: true };
+      });
+      setDisplayProducts(prod);
+      setInitialProducts(prod);
+    }
+  }, [prodData]);
+
+  useEffect(() => {
+    if (currentCategory === "All Products") {
+      setDisplayProducts(initialProducts);
+    }
+    if (currentCategory === `Men's Clothing`) {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === `men's clothing`)
+      );
+    }
+    if (currentCategory === `Women's Clothing`) {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === `women's clothing`)
+      );
+    }
+    if (currentCategory === "Electronics") {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === "electronics")
+      );
+    }
+    if (currentCategory === "Jewelery") {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === "jewelery")
+      );
+    }
+  }, [currentCategory, initialProducts]);
+
+  useEffect(() => {
+    if (currentOrder === "Price(From low to high)") {
+      let p = [...displayProducts].sort((a, b) => {
+        return a.price - b.price;
+      });
+      setDisplayProducts((prev) => (prev = p));
+    }
+    if (currentOrder === "Price(From high to low)") {
+      let q = [...displayProducts].sort((a, b) => {
+        return b.price - a.price;
+      });
+      setDisplayProducts((prev) => (prev = q));
+    }
+    if (currentOrder === "Rating") {
+      let q = [...displayProducts].sort((a, b) => {
+        return b.rating.rate - a.rating.rate;
+      });
+      setDisplayProducts((prev) => (prev = q));
+    }
+    if (currentOrder === "Popularity") {
+      let q = [...displayProducts].sort((a, b) => {
+        return a.rating.count - b.rating.count;
+      });
+      setDisplayProducts((prev) => (prev = q));
+    }
+  }, [currentOrder]);
+
+  function assignCurrentCategory(value) {
+    setCurrentCategory(value);
+  }
+
+  function assignCurrentOrder(value) {
+    setCurrentOrder(value);
+  }
+
+  function handleSearch(e) {
+    const { value } = e.target;
+    setDisplayProducts((prev) =>
+      prev.map((product) =>
+        product.title.toLowerCase().includes(value)
+          ? { ...product, displayElement: true }
+          : { ...product, displayElement: false }
+      )
+    );
+  }
+
+  return (
+    <div className="px-[5%] py-10 space-y-12">
+      {/* SEARCH BAR */}
+      <div className="space-y-4">
+        <SearchBar placeholder="Search" onChange={handleSearch} />
+
+        <div className="flex items-end space-x-6">
+          {/* MOBILE CATEGORIES */}
+          <div className="w-full">
+            <p className="text-md text-neutral-600">Select a category</p>
+            <SelectMenu
+              options={[
+                "All Products",
+                "Men's Clothing",
+                "Women's Clothing",
+                "Electronics",
+                "Jewelery",
+              ]}
+              onChange={assignCurrentCategory}
+              value={currentCategory}
+            />
+          </div>
+          {/* MD + CATEGORIES */}
+          <div className="hidden md:flex">
+            <button onClick={() => assignCurrentCategory(`All Products`)}>
+              All products
+            </button>
+            <button onClick={() => assignCurrentCategory(`Men's Clothing`)}>
+              Men&apos;s clothing
+            </button>
+            <button onClick={() => assignCurrentCategory(`Women's Clothing`)}>
+              Women&apos;s clothing
+            </button>
+            <button onClick={() => assignCurrentCategory(`Electronics`)}>
+              Electronics
+            </button>
+            <button onClick={() => assignCurrentCategory(`Jewelery`)}>
+              Jewelry
+            </button>
+          </div>
+          {/* FILTER */}
+          <div className="w-full">
+            <span className="text-md text-neutral-600">Order by</span>
+            <SelectMenu
+              options={[
+                "",
+                "Price(From low to high)",
+                "Price(From high to low)",
+                "Popularity",
+                "Rating",
+              ]}
+              onChange={assignCurrentOrder}
+              value={currentOrder}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="space-y-12">
+        {displayProducts &&
+          displayProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+      </div>
+    </div>
+  );
+}
+
+export const getServerSideProps = async () => {
+  const res = await fetch("https://fakestoreapi.com/products");
+  const prodData = await res.json();
+
+  return {
+    props: {
+      prodData,
+    },
+  };
+};
