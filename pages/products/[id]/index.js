@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import { useEffect, useState } from "react";
+import SimilarProductsList from "../../../components/SimilarProductsList";
 import { formatCurrency } from "../../../utilities/formatCurrency";
 
-export default function product({ product }) {
-  const { image, title, price, description } = product;
+export default function Product({ product }) {
+  const { image, title, price, description, category, id } = product;
 
   const formattedPrice = formatCurrency(price);
 
   return (
-    <div className="">
-      <div className="">
+    <div className="flex flex-col justify-center items-center p-6 space-y-10">
+      <div className="w-[min(90%,500px)]">
         <img src={image} alt="img of the product" />
       </div>
       <div className="">
@@ -18,7 +20,9 @@ export default function product({ product }) {
         </div>
         <p className="">{description}</p>
       </div>
-      {/* <SimilarProductsList currentProduct={product} allProducts={products} /> */}
+      <div className="w-full h-auto">
+        <SimilarProductsList productId={id} category={category} />
+      </div>
     </div>
   );
 }
@@ -27,7 +31,6 @@ export const getStaticProps = async (context) => {
   const res = await fetch(
     `https://fakestoreapi.com/products/${context.params.id}`
   );
-
   const product = await res.json();
 
   return {
