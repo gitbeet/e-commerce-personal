@@ -4,8 +4,12 @@ import * as ReactDOM from "react-dom";
 import Backdrop from "./Backdrop";
 import Link from "next/link";
 import styles from "../styles/MobileMenu.module.css";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 export default function MobileMenu({ show, onClose }) {
+  const { user } = useAuth();
+
   if (typeof window === "object") {
     return ReactDOM.createPortal(
       <>
@@ -27,6 +31,16 @@ export default function MobileMenu({ show, onClose }) {
                 <li onClick={onClose}>
                   <Link href="/">Home</Link>
                 </li>
+                {!user && (
+                  <>
+                    <li onClick={onClose}>
+                      <Link href="/login">Login</Link>
+                    </li>
+                    <li onClick={onClose}>
+                      <Link href="/register">Register</Link>
+                    </li>
+                  </>
+                )}
                 <li onClick={onClose}>
                   <Link href="/products">Products</Link>
                 </li>

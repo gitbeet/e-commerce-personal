@@ -4,9 +4,12 @@ import { useShoppingCart } from "../context/ShoppingCartContext";
 import Backdrop from "./Backdrop";
 import ShoppingCartModalProduct from "./ShoppingCartModalProduct";
 import { v4 as uuid } from "uuid";
+import Button from "./Button";
+import { useEffect } from "react";
 
 export default function ShoppingCartModal({ show, onClose }) {
   const { shoppingCart } = useShoppingCart();
+
   if (typeof window === "object") {
     return ReactDOM.createPortal(
       <>
@@ -20,7 +23,9 @@ export default function ShoppingCartModal({ show, onClose }) {
                   );
                 })}
               </div>
-              <div></div>
+              <div className="p-4 flex justify-center items-center">
+                <Button type="primary" size="sm" text="Checkout" />
+              </div>
             </div>
             <Backdrop onClose={onClose} zIndex={8} />
           </>

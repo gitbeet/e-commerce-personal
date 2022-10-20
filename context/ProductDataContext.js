@@ -11,12 +11,6 @@ export function useProductData() {
 export default function ProductDataProvider({ children }) {
   const [products, setProducts] = useState();
 
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((response) => response.json())
-      .then((productData) => setProducts(productData));
-  }, []);
-
   return (
     <apiContext.Provider value={{ products }}>{children}</apiContext.Provider>
   );

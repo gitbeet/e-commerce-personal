@@ -7,6 +7,7 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
+    // <Provider store={store}>
     <AuthProvider>
       <ProductDataProvider>
         <ShoppingCartProvider>
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }) {
         </ShoppingCartProvider>
       </ProductDataProvider>
     </AuthProvider>
+    // </Provider>
   );
 }
 

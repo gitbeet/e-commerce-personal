@@ -1,4 +1,4 @@
-export default function SearchBar({ placeholder, onChange, onSearch }) {
+export default function SearchBar({ placeholder, onChange }) {
   return (
     <div className="flex min-w-full justify-between items-center space-x-2   border-b  border-neutral-600">
       <input
@@ -7,7 +7,6 @@ export default function SearchBar({ placeholder, onChange, onSearch }) {
         onChange={(e) => onChange(e.target.value)}
       />
       <svg
-        onClick={onSearch}
         className="cursor-pointer"
         fill="#000000"
         xmlns="http://www.w3.org/2000/svg"

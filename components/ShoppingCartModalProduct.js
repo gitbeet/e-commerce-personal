@@ -3,12 +3,11 @@ import { useEffect, useState } from "react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
 import SmallButton from "./SmallButton";
-export default function ShoppingCartModalProduct({ product }) {
-  const { removeItem } = useShoppingCart();
-  console.log(product);
 
-  const { id, image, title, price } = product.product;
-  const { quantity } = product;
+export default function ShoppingCartModalProduct({ product }) {
+  const { removeItem, changeQuantity } = useShoppingCart();
+
+  const { id, image, title, price, quantity } = product;
 
   if (!product) return <h1>loading data...</h1>;
 
@@ -26,9 +25,9 @@ export default function ShoppingCartModalProduct({ product }) {
             <p>{formattedPrice}</p>
           </div>
           <div className="flex items-center justify-start bg-neutral-800 w-fit space-x-4">
-            <SmallButton text="-" />
+            <SmallButton onClick={() => changeQuantity(id, "minus")} text="-" />
             <p>{quantity}</p>
-            <SmallButton text="+" />
+            <SmallButton onClick={() => changeQuantity(id, "plus")} text="+" />
           </div>
         </div>
       </div>

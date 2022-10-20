@@ -20,13 +20,23 @@ export default function ProductCard(props) {
   }
 
   if (props.product) {
-    const { id, title, description, price, category, image, rating } =
-      props.product;
+    const {
+      id,
+      title,
+      description,
+      price,
+      category,
+      image,
+      rating,
+      displayElement,
+    } = props.product;
     const { rate, count } = rating;
 
     return (
       <div
-        className={`flex-col justify-center items-center border border-neutral-600 rounded-md  text-center`}
+        className={`${
+          displayElement ? "flex" : "hidden"
+        } flex-col justify-center items-center border border-neutral-600 rounded-md  text-center`}
       >
         <div className="px-[10%] py-[10%]">
           {/* IMAGE */}

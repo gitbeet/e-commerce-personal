@@ -1,38 +1,61 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import SelectMenu from "../components/SelectMenu";
 import { useProductData } from "../context/ProductDataContext";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import debounce from "lodash.debounce";
 import { ClipLoader } from "react-spinners";
+
+import db from "../firebase/config";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Products({ prodData }) {
   const { changeUser } = useShoppingCart();
-  const [displayProducts, setDisplayProducts] = useState(prodData);
-  const [currentCategory, setCurrentCategory] = useState("");
+  const [displayProducts, setDisplayProducts] = useState();
+  const [initialProducts, setInitialProducts] = useState();
+  const [currentCategory, setCurrentCategory] = useState("All products");
   const [currentOrder, setCurrentOrder] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // CATEGORY FILTER
   useEffect(() => {
-    if (!currentCategory) {
-      setDisplayProducts(prodData);
-    } else {
-      setLoading(true);
-      fetch(`https://fakestoreapi.com/products/category/${currentCategory}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setLoading(false);
-          setDisplayProducts(data);
-        })
-        .catch((error) => {
-          setError(error);
-        });
+    let prod = prodData.map((product) => {
+      return { ...product, displayElement: true };
+    });
+    setDisplayProducts(prod);
+    setInitialProducts(prod);
+  }, [prodData]);
+
+  useEffect(() => {
+    if (currentCategory === "All products") {
+      setDisplayProducts(initialProducts);
     }
-  }, [currentCategory]);
+    if (currentCategory === `Men's clothing`) {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === `men's clothing`)
+      );
+    }
+    if (currentCategory === `Women's clothing`) {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === `women's clothing`)
+      );
+    }
+    if (currentCategory === "Electronics") {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === "electronics")
+      );
+    }
+    if (currentCategory === "Jewelery") {
+      setDisplayProducts(initialProducts);
+      setDisplayProducts((prev) =>
+        prev.filter((product) => product.category === "jewelery")
+      );
+    }
+  }, [currentCategory, initialProducts]);
 
   // SORTING ITEMS
   useEffect(() => {
@@ -70,33 +93,16 @@ export default function Products({ prodData }) {
     setCurrentOrder(value);
   }
 
-  function handleSearch() {
-    fetch(`https://fakestoreapi.com/products/${searchTerm}`)
-      .then((res) => res.json())
-      .then((data) => setDisplayProducts([...data]));
+  function handleSearch(value) {
+    setDisplayProducts((prev) =>
+      prev.map((product) =>
+        product.title.toLowerCase().includes(value)
+          ? { ...product, displayElement: true }
+          : { ...product, displayElement: false }
+      )
+    );
+    console.log(value);
   }
-
-  // const updateDebounceText = debounce((text) => {
-  //   setSearchTerm(text);
-  // });
-
-  // function debounce(cb, delay = 1000) {
-  //   console.log("rerunning");
-  //   let timeout;
-
-  //   return (...args) => {
-  //     clearInterval(timeout);
-  //     timeout = setInterval(() => {
-  //       cb(...args);
-  //     }, delay);
-  //   };
-  // }
-
-  // useEffect(() => {
-  //   fetch(`https://fakestoreapi.com/products/${searchTerm}`)
-  //     .then((res) => res.json())
-  //     .then((data) => setDisplayProducts([...data]));
-  // }, [searchTerm]);
 
   // if (loading) return <h1>loading...</h1>;
   // if (error) return <h1>ERROR</h1>;
@@ -105,11 +111,7 @@ export default function Products({ prodData }) {
     <div className="px-[5%] py-10 space-y-12">
       {/* SEARCH BAR */}
       <div className="space-y-4">
-        <SearchBar
-          placeholder="Search"
-          onChange={setSearchTerm}
-          onSearch={handleSearch}
-        />
+        <SearchBar placeholder="Search" onChange={handleSearch} />
 
         <div className="flex items-end space-x-6">
           {/* MOBILE CATEGORIES */}
@@ -117,11 +119,11 @@ export default function Products({ prodData }) {
             <p className="text-md text-neutral-600">Select a category</p>
             <SelectMenu
               options={[
-                "",
-                "men's%20clothing",
-                "women's%20clothing",
-                "electronics",
-                "jewelery",
+                "All products",
+                "Men's clothing",
+                "Women's clothing",
+                "Electronics",
+                "Jewelery",
               ]}
               onChange={assignCurrentCategory}
               value={currentCategory}
@@ -129,19 +131,19 @@ export default function Products({ prodData }) {
           </div>
           {/* MD + CATEGORIES */}
           <div className="hidden md:flex">
-            <button onClick={() => assignCurrentCategory(``)}>
+            <button onClick={() => assignCurrentCategory("All products")}>
               All products
             </button>
-            <button onClick={() => assignCurrentCategory(`men's%20clothing`)}>
+            <button onClick={() => assignCurrentCategory("Men's clothing")}>
               Men&apos;s clothing
             </button>
-            <button onClick={() => assignCurrentCategory(`women's%20clothing`)}>
+            <button onClick={() => assignCurrentCategory("Women's clothing")}>
               Women&apos;s clothing
             </button>
-            <button onClick={() => assignCurrentCategory(`electronics`)}>
+            <button onClick={() => assignCurrentCategory("Electronics")}>
               Electronics
             </button>
-            <button onClick={() => assignCurrentCategory(`jewelery`)}>
+            <button onClick={() => assignCurrentCategory("Jewelery")}>
               Jewelry
             </button>
           </div>
@@ -150,7 +152,7 @@ export default function Products({ prodData }) {
             <span className="text-md text-neutral-600">Order by</span>
             <SelectMenu
               options={[
-                "",
+                "----------",
                 "Price(From low to high)",
                 "Price(From high to low)",
                 "Popularity",
@@ -163,20 +165,7 @@ export default function Products({ prodData }) {
         </div>
       </div>
       <div className="space-y-12">
-        <ClipLoader
-          loading={loading}
-          cssOverride={{
-            display: "block",
-            margin: "auto",
-            marginTop: "5rem",
-            borderColor: "orange",
-          }}
-          size={50}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
         {displayProducts &&
-          !loading &&
           displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -186,9 +175,14 @@ export default function Products({ prodData }) {
 }
 
 export const getServerSideProps = async () => {
-  // 'fake' limit so we limit but we have all categories
   const res = await fetch("https://fakestoreapi.com/products/");
   const prodData = await res.json();
+
+  // fetch for now too many requests on firestore
+
+  // const productsCollectionRef = collection(db, "productsList");
+  // const productsSnapshot = await getDocs(productsCollectionRef);
+  // const prodData = productsSnapshot.docs.map((doc) => doc.data());
 
   return {
     props: {
