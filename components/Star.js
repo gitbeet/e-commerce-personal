@@ -1,10 +1,20 @@
 import React from "react";
 
-export default function Star({ checked }) {
+export default function Star({
+  rateable = false,
+  changeColorOnHover,
+  id,
+  checkedUpTo,
+  rate,
+  checked,
+}) {
   return (
     <i
+      onMouseOver={() => changeColorOnHover(id)}
       className={
-        checked ? `fa fa-star text-primary-600` : `fa fa-star text-neutral-500`
+        checkedUpTo >= id
+          ? `fa fa-star text-primary-600 cursor-pointer`
+          : `fa fa-star text-neutral-500 cursor-pointer`
       }
     ></i>
   );

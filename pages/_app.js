@@ -6,9 +6,9 @@ import ShoppingCartProvider from "../context/ShoppingCartContext";
 import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-function MyApp({ Component, pageProps }) {
-  const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
+function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

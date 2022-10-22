@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
-import { useDeferredValue, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import SimilarProductsList from "../../../components/SimilarProductsList";
 import { formatCurrency } from "../../../utilities/formatCurrency";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ import CommentsList from "../../../components/CommentsList";
 import Button from "../../../components/Button";
 import { useAuth } from "../../../context/AuthContext";
 import { v4 as uuid } from "uuid";
+import Rating from "../../../components/Rating";
 
 export default function Product({ product }) {
   const {
@@ -20,14 +21,17 @@ export default function Product({ product }) {
     description,
     category,
     id,
+    rating,
     comments: serverSideComments,
   } = product;
+
+  const { rate, count } = rating;
 
   const { user } = useAuth();
 
   const formattedPrice = formatCurrency(price);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState(serverSideComments);
+  const [comments, setComments] = useState();
   const [editCommentText, setEditCommentText] = useState("");
   const [editCommentId, setEditCommentId] = useState("");
 
@@ -38,8 +42,8 @@ export default function Product({ product }) {
     return data;
   }
 
-  const { isLoading, data, isError } = useQuery(
-    ["get-comments"],
+  const { isLoading, isError } = useQuery(
+    [`get-comment-${id}`],
     () => {
       return getComments();
     },
@@ -52,13 +56,14 @@ export default function Product({ product }) {
       },
     }
   );
+
   // ADD COMMENT
 
   const addCommentReactQuery = () => {
     const queryClient = useQueryClient();
     return useMutation(addComment, {
       onSuccess: () => {
-        queryClient.invalidateQueries(["get-comments"]);
+        queryClient.invalidateQueries([`get-comment-${id}`]);
       },
     });
   };
@@ -77,14 +82,16 @@ export default function Product({ product }) {
       },
       { merge: true }
     );
+    setCommentText("");
   }
+
   // DELETE COMMENT
 
   const deleteCommentReactQuery = () => {
     const queryClient = useQueryClient();
     return useMutation(deleteComment, {
       onSuccess: () => {
-        queryClient.invalidateQueries(["get-comments"]);
+        queryClient.invalidateQueries([`get-comment-${id}`]);
       },
     });
   };
@@ -132,23 +139,14 @@ export default function Product({ product }) {
     // don't call the function here
     return useMutation(handleEditSubmit, {
       onSuccess: () => {
-        queryClient.invalidateQueries(["get-comments"]);
+        queryClient.invalidateQueries([`get-comment-${id}`]);
       },
     });
   };
 
   const { mutate: editCommentTest } = editCommentReactQuery();
 
-  if (user) {
-    console.log(
-      comments.findIndex((comment) => {
-        console.log(comment.userId, user.uid);
-        return comment.userId === user.uid;
-      }) !== -1
-    );
-  }
-
-  if (!user) return <h1>loading...</h1>;
+  if (!user || isLoading || !comments) return <h1>loading...</h1>;
   return (
     <div className="flex flex-col justify-center items-center p-6 space-y-10">
       <div className="w-[min(90%,500px)]">
@@ -157,7 +155,10 @@ export default function Product({ product }) {
       <div className="">
         <div className="">
           <h1>{title}</h1>
-          <p>{formattedPrice}</p>
+          <div>
+            <p>{formattedPrice}</p>
+            <Rating rating={rating} rateable={user} />
+          </div>
         </div>
         <p className="">{description}</p>
       </div>
