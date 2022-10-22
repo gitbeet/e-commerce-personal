@@ -15,26 +15,26 @@ export default function Button({
       onClick={onClick}
       className={
         type === "primary" && size === "sm"
-          ? `w-fit text-md bg-primary-500 text-neutral-900 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-primary-600 transition-all ${
+          ? `disabled:opacity-20 w-fit text-md bg-primary-500 text-neutral-900 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-primary-600 transition-all ${
               disabled && "opacity-50"
             }`
           : type === "primary" && size === "lg"
-          ? `w-fit text-md bg-primary-500 text-neutral-900 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-primary-600 transition-all ${
+          ? `disabled:opacity-20 w-fit text-md bg-primary-500 text-neutral-900 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-primary-600 transition-all ${
               disabled && "opacity-50"
             }`
           : type === "secondary" && size === "sm"
-          ? `w-fit text-md bg-secondary-500 text-secondary-200 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-neutral-400 transition-all ${
+          ? `disabled:opacity-20 w-fit text-md bg-secondary-500 text-secondary-200 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-neutral-400 transition-all ${
               disabled && "opacity-50"
             }`
           : type === "secondary" && size === "lg"
-          ? `w-fit text-md bg-secondary-500 text-secondary-200 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-neutral-400 transition-all ${
+          ? `disabled:opacity-20 w-fit text-md bg-secondary-500 text-secondary-200 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-neutral-400 transition-all ${
               disabled && "opacity-50"
             }`
           : type === "danger" && size === "sm"
-          ? `w-fit text-md bg-danger-500 text-neutral-900 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-danger-600 transition-all ${
+          ? `disabled:opacity-20 w-fit text-md bg-danger-500 text-neutral-900 rounded-md shadow-lg px-6  py-2  hover-hover:hover:bg-danger-600 transition-all ${
               disabled && "opacity-50"
             }`
-          : `w-fit text-md bg-danger-500 text-neutral-900 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-danger-600 transition-all ${
+          : `disabled:opacity-20 w-fit text-md bg-danger-500 text-neutral-900 rounded-md shadow-lg px-6  py-3  hover-hover:hover:bg-danger-600 transition-all ${
               disabled && "opacity-50"
             }`
       }

@@ -26,12 +26,12 @@ export default function Product({ product }) {
   const { user } = useAuth();
 
   const formattedPrice = formatCurrency(price);
-  const [error, setError] = useState("");
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState([serverSideComments]);
+  const [comments, setComments] = useState(serverSideComments);
+  const [editCommentText, setEditCommentText] = useState("");
+  const [editCommentId, setEditCommentId] = useState("");
 
   async function getComments() {
-    console.log(id);
     const productRef = doc(db, "productsList", id);
     const productSnapshot = await getDoc(productRef);
     let data = productSnapshot.data();
@@ -52,8 +52,7 @@ export default function Product({ product }) {
       },
     }
   );
-
-  console.log(data);
+  // ADD COMMENT
 
   const addCommentReactQuery = () => {
     const queryClient = useQueryClient();
@@ -79,6 +78,7 @@ export default function Product({ product }) {
       { merge: true }
     );
   }
+  // DELETE COMMENT
 
   const deleteCommentReactQuery = () => {
     const queryClient = useQueryClient();
@@ -88,7 +88,6 @@ export default function Product({ product }) {
       },
     });
   };
-
   async function deleteComment(commentId) {
     const docRef = doc(db, "productsList", id);
     await setDoc(
@@ -102,6 +101,54 @@ export default function Product({ product }) {
 
   const { mutate: deleteCommentTest } = deleteCommentReactQuery();
 
+  // // EDIT COMMENT
+
+  function handleEditChange(value) {
+    setEditCommentText(value);
+  }
+
+  function handleSetEditCommentId(id) {
+    setEditCommentId(id);
+  }
+
+  async function handleEditSubmit() {
+    const docRef = doc(db, "productsList", id);
+    const p = comments.map((comment) =>
+      comment.id === editCommentId
+        ? { ...comment, text: editCommentText }
+        : comment
+    );
+    await setDoc(
+      docRef,
+      {
+        comments: p,
+      },
+      { merge: true }
+    );
+  }
+
+  const editCommentReactQuery = () => {
+    const queryClient = useQueryClient();
+    // don't call the function here
+    return useMutation(handleEditSubmit, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["get-comments"]);
+      },
+    });
+  };
+
+  const { mutate: editCommentTest } = editCommentReactQuery();
+
+  if (user) {
+    console.log(
+      comments.findIndex((comment) => {
+        console.log(comment.userId, user.uid);
+        return comment.userId === user.uid;
+      }) !== -1
+    );
+  }
+
+  if (!user) return <h1>loading...</h1>;
   return (
     <div className="flex flex-col justify-center items-center p-6 space-y-10">
       <div className="w-[min(90%,500px)]">
@@ -119,11 +166,17 @@ export default function Product({ product }) {
         {user && (
           <div className="flex flex-col items-end space-y-4">
             <textarea
+              value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               className="w-full border resize-none"
               rows={4}
             />
             <Button
+              disabled={
+                comments.findIndex((comment) => {
+                  return comment.userId === user.uid;
+                }) !== -1
+              }
               type="primary"
               size="sm"
               text="Leave a comment"
@@ -134,12 +187,17 @@ export default function Product({ product }) {
         {isLoading ? (
           <h1>loading...</h1>
         ) : isError ? (
-          <h1>loading...</h1>
+          <h1>error...</h1>
         ) : (
-          <CommentsList comments={comments} deleteComment={deleteCommentTest} />
+          <CommentsList
+            comments={comments}
+            deleteComment={deleteCommentTest}
+            handleEditChange={handleEditChange}
+            handleSetEditCommentId={handleSetEditCommentId}
+            subtest={handleEditSubmit}
+            handleEditSubmit={editCommentTest}
+          />
         )}
-
-        <div>{error}</div>
       </div>
       <div className="w-full h-auto text-center space-y-8 py-8 border-t border-b  border-neutral-500">
         <p className="text-xl text-primary-200 font-semibold uppercase">

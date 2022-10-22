@@ -1,6 +1,12 @@
 import Comment from "./Comment";
 
-export default function CommentsList({ comments, deleteComment }) {
+export default function CommentsList({
+  comments,
+  deleteComment,
+  handleEditChange,
+  handleSetEditCommentId,
+  handleEditSubmit,
+}) {
   return (
     <div>
       {comments.map((comment) => {
@@ -9,6 +15,9 @@ export default function CommentsList({ comments, deleteComment }) {
             key={comment.id}
             comment={comment}
             deleteComment={deleteComment}
+            handleEditChange={handleEditChange}
+            handleSetEditCommentId={handleSetEditCommentId}
+            handleEditSubmit={handleEditSubmit}
           />
         );
       })}
