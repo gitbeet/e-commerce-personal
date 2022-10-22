@@ -2,14 +2,29 @@ import SimilarProduct from "./SimilarProduct";
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import db from "../firebase/config";
 
 export default function SimilarProductsList({ category, productId }) {
   const [similarProducts, setSimilarProducts] = useState();
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/category/${category}`)
-      .then((res) => res.json())
-      .then((json) => setSimilarProducts(json));
+    async function getSimilarProducts() {
+      const similarProductsQuery = query(
+        collection(db, "productsList"),
+        where("category", "==", category)
+      );
+      const similarProductsSnapshot = await getDocs(similarProductsQuery);
+
+      let p = [];
+
+      similarProductsSnapshot.forEach((product) => {
+        return p.push(product.data());
+      });
+      setSimilarProducts(p);
+    }
+    getSimilarProducts();
   }, [category]);
 
   if (!similarProducts) return <h1>loading...</h1>;

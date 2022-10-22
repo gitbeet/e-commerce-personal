@@ -46,9 +46,17 @@ export default function ShoppingCartProvider({ children }) {
     if (!user) return;
     async function updateCart() {
       // const userDataRef = doc(db, "users", user.uid);
-      await setDoc(doc(db, "users", user.uid), {
-        shoppingCart,
-      });
+      try {
+        await setDoc(doc(db, "users", user.uid), {
+          shoppingCart,
+        });
+      } catch (error) {
+        console.log(
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message
+        );
+      }
     }
     updateCart();
   }, [shoppingCart]);

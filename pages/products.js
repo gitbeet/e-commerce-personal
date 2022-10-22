@@ -175,14 +175,14 @@ export default function Products({ prodData }) {
 }
 
 export const getServerSideProps = async () => {
-  const res = await fetch("https://fakestoreapi.com/products/");
-  const prodData = await res.json();
+  // const res = await fetch("https://fakestoreapi.com/products/");
+  // const prodData = await res.json();
 
   // fetch for now too many requests on firestore
 
-  // const productsCollectionRef = collection(db, "productsList");
-  // const productsSnapshot = await getDocs(productsCollectionRef);
-  // const prodData = productsSnapshot.docs.map((doc) => doc.data());
+  const productsCollectionRef = collection(db, "productsList");
+  const productsSnapshot = await getDocs(productsCollectionRef);
+  const prodData = productsSnapshot.docs.map((doc) => doc.data());
 
   return {
     props: {

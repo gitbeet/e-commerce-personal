@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { formatCurrency } from "../Utilities/formatCurrency";
+import { formatCurrency } from "../utilities/formatCurrency";
 
 export default function SimilarProduct({ product }) {
   const { title, image, price, id } = product;
