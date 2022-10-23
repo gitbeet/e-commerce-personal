@@ -3,10 +3,17 @@ import Head from "next/head";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
 import iconUserDefault from "../public/assets/icon-user-default.svg";
+import { useRouter } from "next/router";
 
 export default function Profile() {
   const { signout, user } = useAuth();
-  console.log(user);
+
+  const router = useRouter();
+  function signOut() {
+    signout();
+    router.push("/");
+  }
+
   return (
     <div>
       <Head>
@@ -32,7 +39,7 @@ export default function Profile() {
             </svg>
           )}
           <h1>Welcome {user.displayName || user.email}</h1>
-          <Button onClick={signout} text="Logout" type="primary" size="lg" />
+          <Button onClick={signOut} text="Logout" type="primary" size="lg" />
         </>
       )}
     </div>

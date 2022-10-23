@@ -22,7 +22,7 @@ export default function Login() {
     setErrorMessage("");
     try {
       await login(userData.email, userData.password);
-      router.push("/");
+      router.back();
     } catch (error) {
       if (error.code === "auth/invalid-email") {
         setErrorMessage("You have enetered an invalid email");

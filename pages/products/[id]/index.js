@@ -11,6 +11,7 @@ import SimilarProductsList from "../../../components/SimilarProductsList";
 import CommentsList from "../../../components/CommentsList";
 import Button from "../../../components/Button";
 import Rating from "../../../components/Rating";
+import AddToCart from "../../../components/AddToCart";
 
 export default function Product({ product }) {
   const {
@@ -22,6 +23,7 @@ export default function Product({ product }) {
     id,
     comments: serverSideComments,
     rating: serverSideRating,
+    ratedBy,
   } = product;
   const { user } = useAuth();
 
@@ -33,6 +35,20 @@ export default function Product({ product }) {
   const [editCommentId, setEditCommentId] = useState("");
   const [userRating, setUserRating] = useState(Math.round(rating.rate));
   const [ratedByUser, setRatedByUser] = useState(false);
+  const [alreadyRatedMessage, setAlreadyRatedMessage] = useState(false);
+  const [ratedByData, setRatedByData] = useState(ratedBy);
+
+  function toggleAlreadyRatedMessage() {
+    if (!ratedByUser) return;
+    setAlreadyRatedMessage(true);
+    console.log(alreadyRatedMessage);
+
+    setTimeout(() => {
+      setAlreadyRatedMessage(false);
+      console.log(alreadyRatedMessage);
+      console.log(ratedByUser);
+    }, 2000);
+  }
 
   function changeUserRatingOnHover(r) {
     setUserRating(r);
@@ -53,13 +69,11 @@ export default function Product({ product }) {
       onSuccess: (data) => {
         setComments(data.comments);
         setRating(data.rating);
+        setRatedByData(data.ratedBy);
+        if (!user) return;
         if (
           data.ratedBy.findIndex((rating) => rating.userId === user.uid) !== -1
         ) {
-          console.log(
-            data.ratedBy.findIndex((rating) => rating.userId === user.uid) !==
-              -1
-          );
           setRatedByUser(true);
         } else {
           setRatedByUser(false);
@@ -200,9 +214,9 @@ export default function Product({ product }) {
 
   const { mutate: editCommentMutate } = editCommentReactQuery();
 
-  if (!user || isLoading || !comments) return <h1>loading...</h1>;
+  if (isLoading || !comments) return <h1>loading...</h1>;
   return (
-    <div className="flex flex-col justify-center items-center p-6 space-y-10">
+    <div className="flex flex-col justify-center items-center p-6 space-y-10 pt-20">
       <div className="w-[min(90%,500px)]">
         <img src={image} alt="img of the product" />
       </div>
@@ -210,35 +224,49 @@ export default function Product({ product }) {
         <div className="">
           <h1>{title}</h1>
           <div>
-            <div>
-              <div className="flex space-x-4">
-                <p>{formattedPrice}</p>
-                <Rating
-                  userRating={userRating}
-                  rating={rating}
-                  rateable={user}
-                  rateProduct={rateProductMutate}
-                  changeUserRatingOnHover={changeUserRatingOnHover}
-                />
-              </div>
-              {ratedByUser && (
-                <p className="text-danger-500 opacity-50">
-                  You have already rated that item.
+            <div className="flex flex-col py-4 space-y-2">
+              <div>
+                <div className="flex space-x-2 w-full">
+                  <p>{formattedPrice}</p>
+                  <Rating
+                    userRating={userRating}
+                    rating={rating}
+                    rateable={user && !ratedByUser}
+                    rateProduct={rateProductMutate}
+                    changeUserRatingOnHover={changeUserRatingOnHover}
+                    toggleAlreadyRatedMessage={toggleAlreadyRatedMessage}
+                  />
+                </div>
+
+                <p
+                  className={
+                    alreadyRatedMessage
+                      ? "text-danger-500 opacity-75 transition-all"
+                      : "opacity-0  transition-all"
+                  }
+                >
+                  You have already rated this product.
                 </p>
-              )}
+              </div>
+              <div className="self-end">
+                <AddToCart product={product} />
+              </div>
             </div>
           </div>
         </div>
-        <p className="">{description}</p>
+        <div className="flex flex-col space-y-4">
+          <h1 className="font-semibold text-lg">Description</h1>
+          <p className="text-neutral-400">{description}</p>
+        </div>
       </div>
-      <div className="flex flex-col w-full space-y-4  border p-4 overflow-auto">
+      <div className="flex flex-col w-full space-y-4 p-6  border border-neutral-500 rounded-md overflow-auto">
         <h1>Comments</h1>
         {user && (
-          <div className="flex flex-col items-end space-y-4">
+          <div className="flex flex-col items-end space-y-4 ">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className="w-full border resize-none"
+              className="w-full border border-neutral-500 rounded-md resize-none"
               rows={4}
             />
             <Button
@@ -260,6 +288,7 @@ export default function Product({ product }) {
           <h1>error...</h1>
         ) : (
           <CommentsList
+            ratedByData={ratedByData}
             comments={comments}
             deleteComment={deleteCommentMutate}
             handleEditChange={handleEditChange}

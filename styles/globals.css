@@ -23,3 +23,7 @@ a {
 input{
   @apply outline-none focus:outline-none
 }
+
+textarea{
+  @apply outline-none focus:outline-none p-2
+}

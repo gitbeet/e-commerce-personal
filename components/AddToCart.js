@@ -11,6 +11,11 @@ export default function AddToCart({ product }) {
     setQuantity(0);
   }, [product]);
 
+  function add() {
+    addToCart(product, quantity);
+    setQuantity(0);
+  }
+
   return (
     <div className="flex items-center space-x-4">
       <div className="flex items-center justify-center space-x-4 bg-neutral-800 rounded-sm">
@@ -22,12 +27,7 @@ export default function AddToCart({ product }) {
         <SmallButton onClick={() => setQuantity((prev) => prev + 1)} text="+" />
       </div>
 
-      <Button
-        onClick={() => addToCart(product, quantity)}
-        text="Add to cart"
-        type="primary"
-        size="lg"
-      />
+      <Button onClick={add} text="Add to cart" type="primary" size="lg" />
     </div>
   );
 }

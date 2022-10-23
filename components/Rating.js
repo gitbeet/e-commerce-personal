@@ -4,9 +4,11 @@ import Star from "./Star";
 export default function Rating({
   rating,
   rateable = false,
+  commentRating = false,
   rateProduct,
   userRating,
   changeUserRatingOnHover,
+  toggleAlreadyRatedMessage,
 }) {
   const { rate, count } = rating;
 
@@ -36,15 +38,22 @@ export default function Rating({
         </div>
       ) : (
         <div className="flex items-center space-x-2">
-          <div>
+          <div onClick={toggleAlreadyRatedMessage}>
             {stars.map((star) => (
-              <Star key={star.id} id={star.id} rate={rate} />
+              <Star
+                key={star.id}
+                id={star.id}
+                rate={rate}
+                commentRating={commentRating}
+              />
             ))}
           </div>
-          <span className="text-neutral-400">
-            {rate}
-            <span className="text-neutral-400 text-xs"> ({count})</span>
-          </span>
+          {!commentRating && (
+            <span className="text-neutral-400">
+              {rate}
+              <span className="text-neutral-400 text-xs"> ({count})</span>
+            </span>
+          )}
         </div>
       )}
     </>

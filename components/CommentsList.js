@@ -6,12 +6,16 @@ export default function CommentsList({
   handleEditChange,
   handleSetEditCommentId,
   handleEditSubmit,
+  ratedByData,
 }) {
   return (
-    <div>
+    <div className="space-y-4">
       {comments.map((comment) => {
         return (
           <Comment
+            rating={ratedByData.find(
+              (rating) => rating.userId === comment.userId
+            )}
             key={comment.id}
             comment={comment}
             deleteComment={deleteComment}

@@ -7,6 +7,7 @@ export default function Star({
   rateProduct,
   rateable = false,
   rate,
+  commentRating,
 }) {
   return (
     <>
@@ -16,16 +17,24 @@ export default function Star({
           onClick={rateProduct}
           className={
             userRating >= id
-              ? `fa fa-star text-primary-600 cursor-pointer`
-              : `fa fa-star text-neutral-500 cursor-pointer`
+              ? `fa fa-star text-primary-600  ${
+                  !commentRating && "cursor-pointer"
+                }`
+              : `fa fa-star text-neutral-500  ${
+                  !commentRating && "cursor-pointer"
+                }`
           }
         ></i>
       ) : (
         <i
           className={
             Math.round(rate) >= id
-              ? `fa fa-star text-primary-600 cursor-pointer`
-              : `fa fa-star text-neutral-500 cursor-pointer`
+              ? `fa fa-star text-primary-600  ${
+                  !commentRating && "cursor-pointer"
+                }`
+              : `fa fa-star text-neutral-500  ${
+                  !commentRating && "cursor-pointer"
+                }`
           }
         ></i>
       )}
