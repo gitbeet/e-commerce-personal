@@ -1,16 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from "react";
-import SimilarProductsList from "../../../components/SimilarProductsList";
+import { v4 as uuid } from "uuid";
 import { formatCurrency } from "../../../utilities/formatCurrency";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-
+import { useAuth } from "../../../context/AuthContext";
 import db from "../../../firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import SimilarProductsList from "../../../components/SimilarProductsList";
 import CommentsList from "../../../components/CommentsList";
 import Button from "../../../components/Button";
-import { useAuth } from "../../../context/AuthContext";
-import { v4 as uuid } from "uuid";
 import Rating from "../../../components/Rating";
 
 export default function Product({ product }) {
@@ -21,34 +20,67 @@ export default function Product({ product }) {
     description,
     category,
     id,
+    comments: serverSideComments,
     rating: serverSideRating,
-    // comments: serverSideComments,
   } = product;
   const { user } = useAuth();
-  // const { rate, count } = serverSideRating;
 
   const formattedPrice = formatCurrency(price);
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState();
+  const [comments, setComments] = useState(serverSideComments);
   const [rating, setRating] = useState(serverSideRating);
   const [editCommentText, setEditCommentText] = useState("");
   const [editCommentId, setEditCommentId] = useState("");
   const [userRating, setUserRating] = useState(Math.round(rating.rate));
+  const [ratedByUser, setRatedByUser] = useState(false);
 
-  function changeColorOnHover(r) {
-    console.log(rating);
-    console.log(userRating);
-
+  function changeUserRatingOnHover(r) {
     setUserRating(r);
   }
 
   useEffect(() => {
-    changeColorOnHover(Math.round(rating.rate));
-  }, [Math.round(rating.rate)]);
+    changeUserRatingOnHover(Math.round(rating.rate));
+  }, [rating.rate]);
+
+  //  GET PRODUCT DATA
+
+  const { isLoading, isError } = useQuery(
+    [`get-product-data-${id}`],
+    () => {
+      return getComments();
+    },
+    {
+      onSuccess: (data) => {
+        setComments(data.comments);
+        setRating(data.rating);
+        if (
+          data.ratedBy.findIndex((rating) => rating.userId === user.uid) !== -1
+        ) {
+          console.log(
+            data.ratedBy.findIndex((rating) => rating.userId === user.uid) !==
+              -1
+          );
+          setRatedByUser(true);
+        } else {
+          setRatedByUser(false);
+        }
+      },
+      onError: () => {
+        console.log(isError);
+      },
+    }
+  );
+
+  async function getComments() {
+    const productRef = doc(db, "productsList", id);
+    const productSnapshot = await getDoc(productRef);
+    let data = productSnapshot.data();
+    return data;
+  }
 
   // RATING THE PRODUCT
   async function rateProduct() {
-    console.log(userRating, rating.rate, rating.count, rating);
+    if (ratedByUser) return;
     const docRef = doc(db, "productsList", id);
     await setDoc(
       docRef,
@@ -62,10 +94,12 @@ export default function Product({ product }) {
             ) / 10
           ).toFixed(1),
         },
-        // ratedBy: [...ratedBy, { userId: user.uid, rating: userRating }],
       },
       { merge: true }
     );
+    await updateDoc(docRef, {
+      ratedBy: arrayUnion({ userId: user.uid, rating: userRating }),
+    });
   }
 
   const rateProductReactQuery = () => {
@@ -77,32 +111,7 @@ export default function Product({ product }) {
     });
   };
 
-  const { mutate: rateProductTest } = rateProductReactQuery();
-
-  //  GET COMMENTS
-
-  const { isLoading, isError } = useQuery(
-    [`get-product-data-${id}`],
-    () => {
-      return getComments();
-    },
-    {
-      onSuccess: (data) => {
-        setComments(data.comments);
-        setRating(data.rating);
-      },
-      onError: () => {
-        console.log(error);
-      },
-    }
-  );
-
-  async function getComments() {
-    const productRef = doc(db, "productsList", id);
-    const productSnapshot = await getDoc(productRef);
-    let data = productSnapshot.data();
-    return data;
-  }
+  const { mutate: rateProductMutate } = rateProductReactQuery();
 
   // ADD COMMENT
 
@@ -115,20 +124,18 @@ export default function Product({ product }) {
     });
   };
 
-  const { mutate: addCommentTest } = addCommentReactQuery();
+  const { mutate: addCommentMutate } = addCommentReactQuery();
 
   async function addComment() {
     const docRef = doc(db, "productsList", id);
-    await setDoc(
-      docRef,
-      {
-        comments: [
-          ...comments,
-          { user: user.email, userId: user.uid, text: commentText, id: uuid() },
-        ],
-      },
-      { merge: true }
-    );
+    await updateDoc(docRef, {
+      comments: arrayUnion({
+        user: user.email,
+        userId: user.uid,
+        text: commentText,
+        id: uuid(),
+      }),
+    });
     setCommentText("");
   }
 
@@ -153,9 +160,9 @@ export default function Product({ product }) {
     );
   }
 
-  const { mutate: deleteCommentTest } = deleteCommentReactQuery();
+  const { mutate: deleteCommentMutate } = deleteCommentReactQuery();
 
-  // // // EDIT COMMENT
+  // EDIT COMMENT
 
   function handleEditChange(value) {
     setEditCommentText(value);
@@ -191,7 +198,7 @@ export default function Product({ product }) {
     });
   };
 
-  const { mutate: editCommentTest } = editCommentReactQuery();
+  const { mutate: editCommentMutate } = editCommentReactQuery();
 
   if (!user || isLoading || !comments) return <h1>loading...</h1>;
   return (
@@ -203,14 +210,23 @@ export default function Product({ product }) {
         <div className="">
           <h1>{title}</h1>
           <div>
-            <p>{formattedPrice}</p>
-            <Rating
-              userRating={userRating}
-              rating={rating}
-              rateable={user}
-              rateProduct={rateProductTest}
-              changeColorOnHover={changeColorOnHover}
-            />
+            <div>
+              <div className="flex space-x-4">
+                <p>{formattedPrice}</p>
+                <Rating
+                  userRating={userRating}
+                  rating={rating}
+                  rateable={user}
+                  rateProduct={rateProductMutate}
+                  changeUserRatingOnHover={changeUserRatingOnHover}
+                />
+              </div>
+              {ratedByUser && (
+                <p className="text-danger-500 opacity-50">
+                  You have already rated that item.
+                </p>
+              )}
+            </div>
           </div>
         </div>
         <p className="">{description}</p>
@@ -234,7 +250,7 @@ export default function Product({ product }) {
               type="primary"
               size="sm"
               text="Leave a comment"
-              onClick={addCommentTest}
+              onClick={addCommentMutate}
             />
           </div>
         )}
@@ -245,10 +261,10 @@ export default function Product({ product }) {
         ) : (
           <CommentsList
             comments={comments}
-            deleteComment={deleteCommentTest}
+            deleteComment={deleteCommentMutate}
             handleEditChange={handleEditChange}
             handleSetEditCommentId={handleSetEditCommentId}
-            handleEditSubmit={editCommentTest}
+            handleEditSubmit={editCommentMutate}
           />
         )}
       </div>

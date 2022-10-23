@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function Star({
-  changeColorOnHover,
+  changeUserRatingOnHover,
   id,
   userRating,
   rateProduct,
@@ -12,7 +12,7 @@ export default function Star({
     <>
       {rateable ? (
         <i
-          onMouseOver={() => changeColorOnHover(id)}
+          onMouseOver={() => changeUserRatingOnHover(id)}
           onClick={rateProduct}
           className={
             userRating >= id
@@ -23,7 +23,7 @@ export default function Star({
       ) : (
         <i
           className={
-            rate >= id - 1
+            Math.round(rate) >= id
               ? `fa fa-star text-primary-600 cursor-pointer`
               : `fa fa-star text-neutral-500 cursor-pointer`
           }
