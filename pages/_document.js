@@ -23,8 +23,8 @@ class MyDocument extends Document {
         </Head>
         <body>
           <Main />
-          <div id="modal-root" className="absolute" />
           <NextScript />
+          <div id="modal-root" className="absolute" />
         </body>
       </Html>
     );

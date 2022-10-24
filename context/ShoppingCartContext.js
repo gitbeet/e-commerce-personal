@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React, {
   createContext,
   useContext,
@@ -8,6 +9,7 @@ import React, {
 import { useAuth } from "./AuthContext";
 import db from "../firebase/config";
 import { setDoc, getDoc, doc, getDocs } from "firebase/firestore";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 
 const shoppingCartContext = createContext();
 
@@ -22,7 +24,46 @@ export default function ShoppingCartProvider({ children }) {
   const [userData, setUserData] = useState("shoppingCart");
   const [shoppingCart, setShoppingCart] = useState([]);
 
-  console.log(`INITIALIZING STATE ${shoppingCart.length}`);
+  // useEffect(() => {
+  //   if (!user) {
+  //     setShoppingCart([]);
+  //   }
+  //   console.log(user);
+  // }, [user]);
+
+  // const { isLoading, isError } = useQuery(
+  //   [`get-shopping-cart-data`],
+  //   () => {
+  //     return getShoppingCartProducts();
+  //   },
+  //   {
+  //     enabled: Boolean(user?.uid),
+  //     onSuccess: (data) => {
+  //       console.log(data);
+  //       setShoppingCart(data);
+  //     },
+  //   }
+  // );
+
+  // async function getShoppingCartProducts() {
+  //   const cartItemsRef = doc(db, "users", user.uid);
+  //   const cartItemsSnapshot = await getDoc(cartItemsRef);
+  //   return cartItemsSnapshot.data().shoppingCart;
+  // }
+  // const { mutate: updateShoppingCartMutate } = updateShoppingCartReactQuery();
+
+  // function updateShoppingCartReactQuery() {
+  //   const queryClient = useQueryClient();
+  //   return useMutation(updateShoppingCart, {
+  //     onSuccess: queryClient.invalidateQueries("get-shopping-cart-data"),
+  //   });
+  // }
+
+  // async function updateShoppingCart() {
+  //   await setDoc(doc(db, "users", user.uid), {
+  //     shoppingCart,
+  //   });
+  // }
 
   useEffect(() => {
     if (!user) {
@@ -33,7 +74,6 @@ export default function ShoppingCartProvider({ children }) {
       const cartItemsRef = doc(db, "users", user.uid);
       const cartItemsSnapshot = await getDoc(cartItemsRef);
       if (cartItemsSnapshot.exists()) {
-        console.log(cartItemsSnapshot.data());
         setShoppingCart(cartItemsSnapshot.data().shoppingCart);
       } else {
         setShoppingCart([]);
@@ -110,7 +150,6 @@ export default function ShoppingCartProvider({ children }) {
               : { ...product };
           });
     });
-    console.log(shoppingCart);
   }
 
   function changeQuantity(id, operator) {

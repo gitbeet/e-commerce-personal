@@ -1,29 +1,37 @@
 import * as ReactDOM from "react-dom";
-import { useModal } from "../context/ModalContext";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import Backdrop from "./Backdrop";
 import ShoppingCartModalProduct from "./ShoppingCartModalProduct";
 import { v4 as uuid } from "uuid";
 import Button from "./Button";
-import { useEffect } from "react";
+import { formatCurrency } from "../utilities/formatCurrency";
 
 export default function ShoppingCartModal({ show, onClose }) {
   const { shoppingCart } = useShoppingCart();
+
+  let totalPrice = shoppingCart.reduce(
+    (acc, product) => acc + product.price * product.quantity,
+    0
+  );
 
   if (typeof window === "object") {
     return ReactDOM.createPortal(
       <>
         {show ? (
           <>
-            <div className="fixed  w-[min(90%,450px)]  top-[10rem]  z-[9] left-1/2 -translate-x-1/2 bg-neutral-900 p-8 rounded-md ">
-              <div className="flex flex-col space-y-8 border-b border-neutral-600 pb-8">
+            <div className="fixed flex flex-col justify-center items-center  w-[min(90%,450px)]  top-[5%]  z-[9] left-1/2 -translate-x-1/2 bg-neutral-900 p-8  rounded-md shadow-lg ">
+              <div className="flex flex-col max-h-[25rem] overflow-auto  space-y-8 border-b border-neutral-600 pt-4 pb-16 w-full">
                 {shoppingCart.map((product) => {
                   return (
                     <ShoppingCartModalProduct key={uuid()} product={product} />
                   );
                 })}
               </div>
-              <div className="p-4 flex justify-center items-center">
+              <div className="flex justify-between w-full">
+                <p>Total</p>
+                <p>{formatCurrency(totalPrice)}</p>
+              </div>
+              <div className="mt-8 flex justify-center items-center">
                 <Button type="primary" size="sm" text="Checkout" />
               </div>
             </div>

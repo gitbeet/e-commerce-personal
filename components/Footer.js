@@ -3,15 +3,16 @@ import NavLinks from "./NavLinks";
 
 export default function Footer() {
   return (
-    <div className="w-full flex flex-col bg-primary-600  mt-auto pt-6 ">
-      <div className="px-4 flex items-end justify-between pb-4">
-        <ul className="flex flex-col text-md uppercase tracking-widest space-y-2">
-          <NavLinks />
+    <div className="text-neutral-900  w-full flex flex-col bg-primary-500  mt-auto pt-6 ">
+      <div className="px-4 flex items-end justify-between pb-4 ">
+        <ul className="flex flex-col text-md font-semibold  uppercase tracking-widest space-y-2">
+          <NavLinks hoverColor={"neutral-200"} />
         </ul>
         {/* SOCIALS ICONS */}
-        <div className="flex w-[10rem] space-x-4">
+        <div className="flex w-[10rem] space-x-4 fill-neutral-900">
           {/* YOUTUBE */}
           <svg
+            className="hover-hover:hover:fill-neutral-200 transition-all duration-[150] cursor-pointer"
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
@@ -21,6 +22,7 @@ export default function Footer() {
           </svg>
           {/* FACEBOOK */}
           <svg
+            className="hover-hover:hover:fill-neutral-200 transition-all duration-[150] cursor-pointer"
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
@@ -30,6 +32,7 @@ export default function Footer() {
           </svg>
           {/* TWITTER */}
           <svg
+            className="hover-hover:hover:fill-neutral-200 transition-all duration-[150] cursor-pointer"
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
@@ -39,6 +42,7 @@ export default function Footer() {
           </svg>
           {/* INSTAGRAM */}
           <svg
+            className="hover-hover:hover:fill-neutral-200 transition-all duration-[150] cursor-pointer"
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
@@ -48,8 +52,8 @@ export default function Footer() {
           </svg>
         </div>
       </div>
-      <div className="px-4 w-full bg-primary-500">
-        <p className=" ">2022© E-SHOP STORES LIMITED</p>
+      <div className="px-4 w-full pt-8">
+        <p className="font-normal">2022© E-SHOP STORES LIMITED</p>
       </div>
     </div>
   );

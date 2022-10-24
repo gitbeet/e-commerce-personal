@@ -2,8 +2,8 @@
 import Head from "next/head";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
-import iconUserDefault from "../public/assets/icon-user-default.svg";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Profile() {
   const { signout, user } = useAuth();
@@ -21,9 +21,19 @@ export default function Profile() {
         <meta name="description" content="E-shop e-commerce webpage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      Profile
+      {!user && (
+        <>
+          You are not logged in.{" "}
+          <Link href={"/login"}>
+            <span className="cursor-pointer text-secondary-500 font-semibold">
+              Log in
+            </span>
+          </Link>
+        </>
+      )}
       {user && (
         <>
+          Profile
           {/* not sure if working or not */}
           {user.photoUrl ? (
             <img src={user.photoUrl} alt="user avatar" />

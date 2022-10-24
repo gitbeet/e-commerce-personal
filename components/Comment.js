@@ -37,10 +37,12 @@ export default function Comment({
       {/* <Image width={40} height={40} src={userPhoto} alt="user avatar" /> */}
       {!editMode && (
         <div className="space-y-2">
-          <Rating
-            rating={{ rate: rating.rating, count: 0 }}
-            commentRating={true}
-          />
+          {rating && (
+            <Rating
+              rating={{ rate: rating.rating, count: 0 }}
+              commentRating={true}
+            />
+          )}
           <p className="text-sm font-semibold text-neutral-200">{text}</p>
           <p className=" text-neutral-400 text-sm">{user}</p>
         </div>
@@ -51,7 +53,7 @@ export default function Comment({
           <div className="flex flex-col space-y-2 mt-8">
             <textarea
               onChange={(e) => handleEditChange(e.target.value)}
-              className="w-full border rounded-md border-neutral-500 resize-none p-2"
+              className="w-full border rounded-md border-neutral-500 resize-none p-2 focus:border-primary-500"
             >
               {text}
             </textarea>

@@ -36,7 +36,7 @@ export default function ProductCard(props) {
       <div
         className={`${
           displayElement ? "flex" : "hidden"
-        } flex-col justify-center items-center border border-neutral-600 rounded-md  text-center`}
+        } flex-col justify-center items-center border border-neutral-800 rounded-md  text-center`}
       >
         <div className="px-[10%] py-[10%]">
           {/* IMAGE */}
@@ -63,7 +63,9 @@ export default function ProductCard(props) {
             <div className="flex justify-between mb-10">
               <Rating rating={rating} />
               <Link className="more__info" href={`/products/${id}`}>
-                <p className=" cursor-pointer text-secondary-500">More info</p>
+                <p className=" cursor-pointer text-secondary-600 hover-hover:hover:text-secondary-500 transition-all">
+                  More info
+                </p>
               </Link>
             </div>
             {/* PRICE ROW */}

@@ -8,7 +8,10 @@ export default function ShoppingCartNav() {
 
   if (!shoppingCart) return <h1>loading...</h1>;
   return (
-    <div onClick={toggleShoppingCartModal} className="relative cursor-pointer">
+    <div
+      onClick={toggleShoppingCartModal}
+      className="relative cursor-pointer hover-hover:hover:text-primary-600 transition-all"
+    >
       <svg
         version="1.0"
         xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +22,7 @@ export default function ShoppingCartNav() {
       >
         <g
           transform="translate(0.000000,413.000000) scale(0.100000,-0.100000)"
-          fill="#000000"
+          fill="currentColor"
           stroke="none"
         >
           <path
@@ -55,7 +58,7 @@ m1815 -1176 l0 -270 -339 0 -339 0 -11 45 c-6 25 -41 143 -76 262 -36 119 -65
           />
         </g>
       </svg>
-      <div className=" absolute flex items-center justify-center rounded-full  bg-primary-600 font-semibold w-6 h-6 top-[1.4rem] left-[1.3rem]">
+      <div className=" absolute flex items-center justify-center rounded-full  bg-primary-550 text-neutral-900 font-semibold w-6 h-6 top-[1.4rem] left-[1.3rem]">
         {shoppingCart.length}
       </div>
     </div>

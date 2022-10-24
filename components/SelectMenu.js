@@ -5,11 +5,11 @@ export default function SelectMenu({ options, onChange, value }) {
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full h-12  rounded-md text-center px-2 text-sm capitalize"
+      className="w-full h-12  rounded-md text-center px-2 text-md capitalize bg-neutral-900 border border-neutral-800"
     >
       {options.map((option) => {
         return (
-          <option className="capitalize" key={uuid()}>
+          <option className="capitalize text-neutral-400" key={uuid()}>
             {option}
           </option>
         );

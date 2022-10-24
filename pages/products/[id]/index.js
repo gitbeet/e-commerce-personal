@@ -41,12 +41,9 @@ export default function Product({ product }) {
   function toggleAlreadyRatedMessage() {
     if (!ratedByUser) return;
     setAlreadyRatedMessage(true);
-    console.log(alreadyRatedMessage);
 
     setTimeout(() => {
       setAlreadyRatedMessage(false);
-      console.log(alreadyRatedMessage);
-      console.log(ratedByUser);
     }, 2000);
   }
 
@@ -259,14 +256,16 @@ export default function Product({ product }) {
           <p className="text-neutral-400">{description}</p>
         </div>
       </div>
-      <div className="flex flex-col w-full space-y-4 p-6  border border-neutral-500 rounded-md overflow-auto">
-        <h1>Comments</h1>
+      <div className="flex flex-col w-full space-y-4 py-6   border-neutral-500 rounded-md overflow-auto">
+        <p className="py-2 text-xl font-semibold uppercase bg-gradient-to-r   from-primary-600 to-primary-550 via-primary-500  text-neutral-900 text-center w-full">
+          Client opinions
+        </p>
         {user && (
-          <div className="flex flex-col items-end space-y-4 ">
+          <div className="flex flex-col items-end space-y-4 py-10 ">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              className="w-full border border-neutral-500 rounded-md resize-none"
+              className="w-full border rounded-md border-neutral-500 resize-none p-2 focus:border-primary-500"
               rows={4}
             />
             <Button
@@ -297,8 +296,8 @@ export default function Product({ product }) {
           />
         )}
       </div>
-      <div className="w-full h-auto text-center space-y-8 py-8 border-t border-b  border-neutral-500">
-        <p className="text-xl text-primary-200 font-semibold uppercase">
+      <div className="w-full h-auto text-center space-y-8 py-8   border-neutral-500">
+        <p className="py-2 text-xl font-semibold uppercase bg-gradient-to-r   from-primary-600 to-primary-550 via-primary-500 text-neutral-900">
           You may also like
         </p>
         <SimilarProductsList productId={id} category={category} />

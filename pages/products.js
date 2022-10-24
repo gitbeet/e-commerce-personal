@@ -110,12 +110,12 @@ export default function Products({ prodData }) {
   return (
     <div className="px-[5%] py-10 space-y-12">
       {/* SEARCH BAR */}
-      <div className="space-y-4">
+      <div className="space-y-10">
         <SearchBar placeholder="Search" onChange={handleSearch} />
 
         <div className="flex items-end space-x-6">
           {/* MOBILE CATEGORIES */}
-          <div className="w-full">
+          <div className="w-full space-y-4">
             <p className="text-md text-neutral-600">Select a category</p>
             <SelectMenu
               options={[
@@ -148,7 +148,7 @@ export default function Products({ prodData }) {
             </button>
           </div>
           {/* FILTER */}
-          <div className="w-full">
+          <div className="w-full space-y-4">
             <span className="text-md text-neutral-600">Order by</span>
             <SelectMenu
               options={[
@@ -175,11 +175,6 @@ export default function Products({ prodData }) {
 }
 
 export const getServerSideProps = async () => {
-  // const res = await fetch("https://fakestoreapi.com/products/");
-  // const prodData = await res.json();
-
-  // fetch for now too many requests on firestore
-
   const productsCollectionRef = collection(db, "productsList");
   const productsSnapshot = await getDocs(productsCollectionRef);
   const prodData = productsSnapshot.docs.map((doc) => doc.data());
