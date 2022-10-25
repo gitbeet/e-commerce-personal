@@ -4,10 +4,17 @@ import Meta from "./Meta";
 import MobileMenu from "./MobileMenu";
 import Nav from "./Nav";
 import ShoppingCartModal from "./ShoppingCartModal";
+import UserModal from "./UserModal";
 
 export default function Layout({ children }) {
-  const { showMobileMenu, toggleMobileMenu } = useModal();
-  const { showShoppingCartModal, toggleShoppingCartModal } = useModal();
+  const {
+    showMobileMenu,
+    toggleMobileMenu,
+    showShoppingCartModal,
+    toggleShoppingCartModal,
+    showUserModal,
+    toggleUserModal,
+  } = useModal();
 
   return (
     <div className="min-h-[100vh] flex flex-col">

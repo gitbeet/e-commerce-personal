@@ -11,9 +11,14 @@ export function useModal() {
 export default function ModalProvider({ children }) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showShoppingCartModal, setShowShoppingCartModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   function toggleMobileMenu() {
     setShowMobileMenu((prev) => !prev);
+  }
+
+  function toggleUserModal() {
+    setShowUserModal((prev) => !prev);
   }
 
   function toggleShoppingCartModal() {
@@ -27,6 +32,8 @@ export default function ModalProvider({ children }) {
         toggleMobileMenu,
         showShoppingCartModal,
         toggleShoppingCartModal,
+        showUserModal,
+        toggleUserModal,
       }}
     >
       {children}
