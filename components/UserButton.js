@@ -6,7 +6,7 @@ export default function UserButton() {
   const myRef = useRef();
 
   const [pos, setPos] = useState([]);
-  const { showUserModal, toggleUserModal } = useModal();
+  const { toggleUserModal } = useModal();
 
   useEffect(() => {
     if (!myRef) return;

@@ -22,7 +22,7 @@ export default function MobileMenu({ show, onClose }) {
       <div
         className={`fixed min-h-[100vh] top-0 bottom-0 left-0 pl-10 pr-28 pt-24 z-[20] bg-neutral-900 shadow-lg ${
           show ? "translate-x-0" : "-translate-x-full"
-        } transition-all backdrop-blur-md`}
+        } transition-all duration-[450ms] ease-in-out backdrop-blur-md`}
       >
         <p
           onClick={onClose}
