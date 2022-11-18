@@ -1,4 +1,5 @@
 import Head from "next/head";
+import SearchBar from "../components/SearchBar";
 import { useAuth } from "../context/AuthContext";
 export default function Home() {
   const { user } = useAuth();
@@ -10,7 +11,7 @@ export default function Home() {
         <meta name="description" content="E-shop e-commerce webpage" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className="text-2xl text-center">HOMEPAGE</h1>
+      <SearchBar />
     </div>
   );
 }

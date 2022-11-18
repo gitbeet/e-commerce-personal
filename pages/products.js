@@ -11,8 +11,8 @@ import { collection, getDocs } from "firebase/firestore";
 
 export default function Products({ prodData }) {
   const { changeUser } = useShoppingCart();
-  const [displayProducts, setDisplayProducts] = useState();
-  const [initialProducts, setInitialProducts] = useState();
+  const [displayProducts, setDisplayProducts] = useState(prodData);
+  const [initialProducts, setInitialProducts] = useState(prodData);
   const [currentCategory, setCurrentCategory] = useState("All products");
   const [currentOrder, setCurrentOrder] = useState("");
   const [loading, setLoading] = useState(false);
@@ -111,7 +111,7 @@ export default function Products({ prodData }) {
     <div className="px-[5%] py-10 space-y-12">
       {/* SEARCH BAR */}
       <div className="space-y-10">
-        <SearchBar placeholder="Search" onChange={handleSearch} />
+        <SearchBar placeholder="Search our products" onChange={handleSearch} />
 
         <div className="flex items-end space-x-6">
           {/* MOBILE CATEGORIES */}

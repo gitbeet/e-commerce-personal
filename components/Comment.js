@@ -16,7 +16,6 @@ export default function Comment({
   const { user, userPhoto, text, userId, id } = comment;
   const { user: userData } = useAuth();
   const [editMode, setEditMode] = useState(false);
-  const [editText, setEditText] = useState(text);
 
   function toggleEditMode() {
     if (editMode) {
