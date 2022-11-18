@@ -164,7 +164,7 @@ export default function Products({ prodData }) {
           </div>
         </div>
       </div>
-      <div className="space-y-12">
+      <div className="md:gap-8  md:flex flex-wrap justify-center items-stretch">
         {displayProducts &&
           displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />

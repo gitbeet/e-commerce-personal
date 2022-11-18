@@ -2,13 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-#modal-root{
+#modal-root {
   z-index: 1;
 }
 
 html,
 body {
-  font-family: 'Montserrat' , sans-serif;
+  font-family: "Montserrat", sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -20,14 +20,66 @@ a {
   box-sizing: border-box;
 }
 
-input{
-  @apply outline-none focus:outline-none
+input {
+  @apply outline-none focus:outline-none;
 }
 
-textarea{
-  @apply outline-none focus:outline-none p-2
+textarea {
+  @apply outline-none focus:outline-none p-2;
 }
 
-body{
+/* * {
+  outline: 1px solid red !important;
+} */
 
+.swiper-container {
+  width: 375px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  transform: scale(2);
+  background-image: url(../public/assets/icon-arrow-left.svg);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center;
+}
+
+/* .swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-image: url(../public/assets/icon-arrow-left-hover.svg);
+} */
+
+.swiper-button-next {
+  rotate: 180deg;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next::after {
+  display: none;
+}
+/* MEDIA QUERIES SWIPER */
+
+@media screen and (min-width: 375px) {
+  .swiper-container {
+    width: 375px;
+  }
+}
+
+@media screen and (min-width: 640px) {
+  .swiper-container {
+    width: 640px;
+  }
+}
+
+@media screen and (min-width: 968px) {
+  .swiper-container {
+    width: 968px;
+  }
+}
+
+@media screen and (min-width: 1280) {
+  .swiper-container {
+    width: 1280;
+  }
 }

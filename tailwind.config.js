@@ -61,5 +61,5 @@ module.exports = {
     //   "danger-600": "hsla(0, 100%, 63%, 1)",
     // },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/line-clamp")],
 };

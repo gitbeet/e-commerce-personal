@@ -7,12 +7,12 @@ export default function SimilarProduct({ product }) {
 
   return (
     <Link href={`/products/${id}`}>
-      <div className="cursor-pointer h-[70vw] bg-neutral-900 border border-neutral-500 rounded-md flex flex-col items-center justify-between px-4 py-2 ">
-        <div className="block max-h-[48px] overflow-hidden">
-          <p className="w-fit leading-4   text-sm text-center">{title}</p>
+      <div className="cursor-pointer w-[250px] h-[350px] bg-neutral-900 border border-neutral-500 rounded-md flex flex-col items-center justify-between px-4 py-2 ">
+        <div className="block   line-clamp-2">
+          <p className="w-fit leading-4  text-sm text-center">{title}</p>
         </div>
 
-        <div className="flex items-center justify-center w-full max-h-[35vw]">
+        <div className="flex items-center justify-center w-full max-h-[70%]">
           <img className="max-h-full" src={image} alt="img src" />
         </div>
         <p>{formatCurrency(price)}</p>

@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import { useState } from "react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
 import { formatCurrency } from "../utilities/formatCurrency";
 import Rating from "./Rating";
 import ImageModal from "./ImageModal";
 import Link from "next/link";
-import Button from "./Button";
 import AddToCart from "./AddToCart";
 
 export default function ProductCard(props) {
@@ -33,25 +32,25 @@ export default function ProductCard(props) {
     const { rate, count } = rating;
 
     return (
-      <div
-        className={`${
-          displayElement ? "flex" : "hidden"
-        } flex-col justify-center items-center border border-neutral-800 rounded-md  text-center`}
-      >
-        <div className="px-[10%] py-[10%]">
+      <>
+        <div
+          className={`${
+            displayElement ? "flex" : "hidden"
+          } flex-col justify-center items-center border border-neutral-800 rounded-md  text-center md:w-[20rem] p-6 md:justify-between`}
+        >
           {/* IMAGE */}
           <div
             onClick={openModal}
-            className="flex items-center justify-center overflow-hidden cursor-pointer"
+            className="w-full overflow-hidden cursor-pointer"
           >
             <img
-              className="hover-hover:hover:scale-110 transition-all duration-[400ms] ease-in-out"
+              className=" hover-hover:hover:scale-110 transition-all duration-[400ms] ease-in-out"
               src={image}
               alt="product img"
             />
           </div>
           {/* BODY */}
-          <div className="">
+          <div>
             <div className="mb-24 mt-8">
               <Link href={`/products/${id}`}>
                 <p className="text-neutral-400 text-xl cursor-pointer">
@@ -78,7 +77,7 @@ export default function ProductCard(props) {
           </div>
         </div>
         <ImageModal open={open} product={props.product} onClose={closeModal} />
-      </div>
+      </>
     );
   } else {
     return <h1>loading...</h1>;

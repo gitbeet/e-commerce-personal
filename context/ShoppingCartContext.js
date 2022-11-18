@@ -1,11 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, {
-  createContext,
-  useContext,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import db from "../firebase/config";
 import { setDoc, getDoc, doc, getDocs } from "firebase/firestore";

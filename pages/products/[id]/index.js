@@ -55,7 +55,7 @@ export default function Product({ product }) {
     changeUserRatingOnHover(Math.round(rating.rate));
   }, [rating.rate]);
 
-  //  GET PRODUCT DATA
+  // --------------------- GET PRODUCT DATA ---------------------
 
   const { isLoading, isError } = useQuery(
     [`get-product-data-${id}`],
@@ -89,7 +89,10 @@ export default function Product({ product }) {
     return data;
   }
 
-  // RATING THE PRODUCT
+  // -----------------------------------------------------------
+
+  // --------------------- RATING THE PRODUCT ------------------
+
   async function rateProduct() {
     if (ratedByUser) return;
     const docRef = doc(db, "productsList", id);
@@ -124,18 +127,9 @@ export default function Product({ product }) {
 
   const { mutate: rateProductMutate } = rateProductReactQuery();
 
-  // ADD COMMENT
+  // -------------------------------------------------------
 
-  const addCommentReactQuery = () => {
-    const queryClient = useQueryClient();
-    return useMutation(addComment, {
-      onSuccess: () => {
-        queryClient.invalidateQueries([`get-product-data-${id}`]);
-      },
-    });
-  };
-
-  const { mutate: addCommentMutate } = addCommentReactQuery();
+  // --------------------- ADD COMMENT ---------------------
 
   async function addComment() {
     const docRef = doc(db, "productsList", id);
@@ -150,7 +144,20 @@ export default function Product({ product }) {
     setCommentText("");
   }
 
-  // DELETE COMMENT
+  const addCommentReactQuery = () => {
+    const queryClient = useQueryClient();
+    return useMutation(addComment, {
+      onSuccess: () => {
+        queryClient.invalidateQueries([`get-product-data-${id}`]);
+      },
+    });
+  };
+
+  const { mutate: addCommentMutate } = addCommentReactQuery();
+
+  // ----------------------------------------------------------
+
+  // --------------------- DELETE COMMENT ---------------------
 
   const deleteCommentReactQuery = () => {
     const queryClient = useQueryClient();
@@ -173,7 +180,9 @@ export default function Product({ product }) {
 
   const { mutate: deleteCommentMutate } = deleteCommentReactQuery();
 
-  // EDIT COMMENT
+  // -----------------------------------------------------------
+
+  // --------------------- EDIT COMMENT ---------------------
 
   function handleEditChange(value) {
     setEditCommentText(value);
@@ -210,6 +219,8 @@ export default function Product({ product }) {
   };
 
   const { mutate: editCommentMutate } = editCommentReactQuery();
+
+  // -----------------------------------------------------------
 
   if (isLoading || !comments) return <h1>loading...</h1>;
   return (
