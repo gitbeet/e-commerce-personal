@@ -17,15 +17,17 @@ export default function Layout({ children }) {
   } = useModal();
 
   return (
-    <div className="min-h-[100vh] flex flex-col">
-      <Meta />
-      <Nav />
-      <MobileMenu show={showMobileMenu} onClose={toggleMobileMenu} />
-      <ShoppingCartModal
-        show={showShoppingCartModal}
-        onClose={toggleShoppingCartModal}
-      />
-      {children}
+    <div className="min-h-[100vh] flex flex-col ">
+      <div className="lg:w-[80%] mx-auto flex flex-col">
+        <Meta />
+        <Nav />
+        <MobileMenu show={showMobileMenu} onClose={toggleMobileMenu} />
+        <ShoppingCartModal
+          show={showShoppingCartModal}
+          onClose={toggleShoppingCartModal}
+        />
+        {children}
+      </div>
       <Footer />
     </div>
   );

@@ -8,7 +8,7 @@
 
 html,
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Open Sans", sans-serif;
   padding: 0;
   margin: 0;
 }
@@ -45,11 +45,6 @@ textarea {
   background-position: center;
 }
 
-/* .swiper-button-next:hover,
-.swiper-button-prev:hover {
-  background-image: url(../public/assets/icon-arrow-left-hover.svg);
-} */
-
 .swiper-button-next {
   rotate: 180deg;
 }
@@ -60,9 +55,21 @@ textarea {
 }
 /* MEDIA QUERIES SWIPER */
 
+.products-grid {
+  display: grid;
+}
+
 @media screen and (min-width: 375px) {
   .swiper-container {
     width: 375px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13.875rem, 1fr));
+    gap: 0.4rem;
   }
 }
 

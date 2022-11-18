@@ -17,7 +17,7 @@ export default function SearchBar({ placeholder, onChange }) {
         onChange={(e) => onChange(e.target.value)}
       />
       <svg
-        className={`absolute left-[95%] -translate-x-full ${
+        className={`absolute left-[95%] md:left-[98%] -translate-x-full ${
           focus ? "fill-primary-600" : "fill-neutral-500"
         } transition-all `}
         fill="currentColor"

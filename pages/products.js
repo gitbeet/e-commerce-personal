@@ -8,6 +8,7 @@ import { ClipLoader } from "react-spinners";
 
 import db from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
+import Button from "../components/Button";
 
 export default function Products({ prodData }) {
   const { changeUser } = useShoppingCart();
@@ -15,9 +16,6 @@ export default function Products({ prodData }) {
   const [initialProducts, setInitialProducts] = useState(prodData);
   const [currentCategory, setCurrentCategory] = useState("All products");
   const [currentOrder, setCurrentOrder] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     let prod = prodData.map((product) => {
@@ -60,30 +58,30 @@ export default function Products({ prodData }) {
   // SORTING ITEMS
   useEffect(() => {
     if (currentOrder === "Price(From low to high)") {
-      let p = [...displayProducts].sort((a, b) => {
+      let sortedProducts = [...displayProducts].sort((a, b) => {
         return a.price - b.price;
       });
-      setDisplayProducts((prev) => (prev = p));
+      setDisplayProducts(sortedProducts);
     }
     if (currentOrder === "Price(From high to low)") {
-      let q = [...displayProducts].sort((a, b) => {
+      let sortedProducts = [...displayProducts].sort((a, b) => {
         return b.price - a.price;
       });
-      setDisplayProducts((prev) => (prev = q));
+      setDisplayProducts(sortedProducts);
     }
     if (currentOrder === "Rating") {
-      let q = [...displayProducts].sort((a, b) => {
+      let sortedProducts = [...displayProducts].sort((a, b) => {
         return b.rating.rate - a.rating.rate;
       });
-      setDisplayProducts((prev) => (prev = q));
+      setDisplayProducts(sortedProducts);
     }
     if (currentOrder === "Popularity") {
-      let q = [...displayProducts].sort((a, b) => {
+      let sortedProducts = [...displayProducts].sort((a, b) => {
         return a.rating.count - b.rating.count;
       });
-      setDisplayProducts((prev) => (prev = q));
+      setDisplayProducts(sortedProducts);
     }
-  }, [currentOrder]);
+  }, [currentOrder, displayProducts]);
 
   function assignCurrentCategory(value) {
     setCurrentCategory(value);
@@ -96,12 +94,11 @@ export default function Products({ prodData }) {
   function handleSearch(value) {
     setDisplayProducts((prev) =>
       prev.map((product) =>
-        product.title.toLowerCase().includes(value)
+        product.title.toLowerCase().includes(value.toLowerCase())
           ? { ...product, displayElement: true }
           : { ...product, displayElement: false }
       )
     );
-    console.log(value);
   }
 
   // if (loading) return <h1>loading...</h1>;
@@ -113,9 +110,9 @@ export default function Products({ prodData }) {
       <div className="space-y-10">
         <SearchBar placeholder="Search our products" onChange={handleSearch} />
 
-        <div className="flex items-end space-x-6">
+        <div className="flex items-end space-x-6 lg:justify-between lg:space-x-0">
           {/* MOBILE CATEGORIES */}
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 lg:hidden">
             <p className="text-md text-neutral-600">Select a category</p>
             <SelectMenu
               options={[
@@ -130,25 +127,62 @@ export default function Products({ prodData }) {
             />
           </div>
           {/* MD + CATEGORIES */}
-          <div className="hidden md:flex">
-            <button onClick={() => assignCurrentCategory("All products")}>
-              All products
-            </button>
-            <button onClick={() => assignCurrentCategory("Men's clothing")}>
-              Men&apos;s clothing
-            </button>
-            <button onClick={() => assignCurrentCategory("Women's clothing")}>
-              Women&apos;s clothing
-            </button>
-            <button onClick={() => assignCurrentCategory("Electronics")}>
-              Electronics
-            </button>
-            <button onClick={() => assignCurrentCategory("Jewelery")}>
-              Jewelry
-            </button>
+          <div className="hidden lg:flex gap-x-4 ">
+            <Button
+              padding="2"
+              textSize="sm"
+              fontWeight="normal"
+              text="All products"
+              type="ghost"
+              shadow={false}
+              onClick={() => assignCurrentCategory("All products")}
+              focus={currentCategory === "All products"}
+            />
+
+            <Button
+              text="Men's clothing"
+              textSize="sm"
+              fontWeight="normal"
+              padding="2"
+              type="ghost"
+              shadow={false}
+              onClick={() => assignCurrentCategory("Men's clothing")}
+              focus={currentCategory === "Men's clothing"}
+            />
+
+            <Button
+              text="Women's clothing"
+              textSize="sm"
+              fontWeight="normal"
+              padding="2"
+              type="ghost"
+              shadow={false}
+              onClick={() => assignCurrentCategory("Women's clothing")}
+              focus={currentCategory === "Women's clothing"}
+            />
+            <Button
+              text="Electronics"
+              textSize="sm"
+              fontWeight="normal"
+              padding="2"
+              type="ghost"
+              shadow={false}
+              onClick={() => assignCurrentCategory("Electronics")}
+              focus={currentCategory === "Electronics"}
+            />
+            <Button
+              text="Jewelery"
+              textSize="sm"
+              fontWeight="normal"
+              padding="2"
+              type="ghost"
+              shadow={false}
+              onClick={() => assignCurrentCategory("Jewelery")}
+              focus={currentCategory === "Jewelery"}
+            />
           </div>
           {/* FILTER */}
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 lg:w-1/4">
             <span className="text-md text-neutral-600">Order by</span>
             <SelectMenu
               options={[
@@ -164,7 +198,8 @@ export default function Products({ prodData }) {
           </div>
         </div>
       </div>
-      <div className="md:gap-8  md:flex flex-wrap justify-center items-stretch">
+      {/* <div className="md:gap-8  md:flex flex-wrap justify-center items-stretch"> */}
+      <div className="products-grid">
         {displayProducts &&
           displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
