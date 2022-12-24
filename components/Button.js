@@ -11,13 +11,16 @@ export default function Button({
   fontWeight = "semibold",
   shadow = true,
   focus = false,
+  width = "fit",
+  icon = "",
 }) {
+  // const paddingX = `px-${padding}`;
   return (
     <button
       disabled={disabled}
       tabIndex={0}
       onClick={onClick}
-      className={`disabled:opacity-50   w-full text-${textSize} font-${fontWeight} rounded-md ${
+      className={`disabled:opacity-50   w-${width} text-${textSize} font-${fontWeight} rounded-md ${
         shadow ? "shadow-lg" : ""
       } transition-all duration-[200ms] whitespace-nowrap ${
         size === "sm" ? `px-${padding} py-2` : `px-${padding} py-3`
@@ -37,7 +40,9 @@ export default function Button({
           : ""
       } `}
     >
-      {text}
+      <div className="flex justify-center items-center space-x-4">
+        {icon && <span>{icon}</span>} <span>{text}</span>
+      </div>
     </button>
   );
 }

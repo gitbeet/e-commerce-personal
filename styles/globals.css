@@ -55,9 +55,9 @@ textarea {
 }
 /* MEDIA QUERIES SWIPER */
 
-.products-grid {
+/* .products-grid {
   display: grid;
-}
+} */
 
 @media screen and (min-width: 375px) {
   .swiper-container {

@@ -13,12 +13,12 @@ export default function AddToCart({ product }) {
 
   return (
     <div className="flex items-center space-x-4">
-      <div className="flex items-center justify-center space-x-4 bg-neutral-850 rounded-sm p-1">
+      <div className="flex items-center justify-center space-x-2 bg-neutral-850 rounded-sm p-1">
         <SmallButton
           onClick={() => setQuantity((prev) => (prev < 1 ? 0 : prev - 1))}
           text="-"
         />
-        <p className="w-4">{quantity}</p>
+        <p className="w-4 text-md">{quantity}</p>
         <SmallButton onClick={() => setQuantity((prev) => prev + 1)} text="+" />
       </div>
 
@@ -27,6 +27,8 @@ export default function AddToCart({ product }) {
         text="Add to cart"
         type="primary"
         size="lg"
+        textSize="sm"
+        padding="4"
       />
     </div>
   );

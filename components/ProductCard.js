@@ -5,10 +5,11 @@ import { formatCurrency } from "../utilities/formatCurrency";
 import Rating from "./Rating";
 import ImageModal from "./ImageModal";
 import Link from "next/link";
-import AddToCart from "./AddToCart";
+import Button from "./Button";
+import { IoCartOutline } from "react-icons/io5";
 
 export default function ProductCard(props) {
-  const { addItems } = useShoppingCart();
+  const { addItems, addToCart } = useShoppingCart();
   const [open, setOpen] = useState(false);
   function openModal() {
     setOpen(true);
@@ -36,7 +37,7 @@ export default function ProductCard(props) {
         <div
           className={`${
             displayElement ? "flex" : "hidden"
-          } flex-col justify-center items-center border border-neutral-800 rounded-md  text-center md:w-[20rem] p-6 md:justify-between`}
+          } min-w-[9.75rem] flex-col justify-between items-center border border-neutral-800 rounded-md  text-center p-6`}
         >
           {/* IMAGE */}
           <div
@@ -44,36 +45,47 @@ export default function ProductCard(props) {
             className="w-full overflow-hidden cursor-pointer"
           >
             <img
-              className=" hover-hover:hover:scale-110 transition-all duration-[400ms] ease-in-out"
+              className=" hover-hover:hover:scale-105 transition-all duration-[400ms] ease-in-out"
               src={image}
               alt="product img"
             />
           </div>
           {/* BODY */}
-          <div>
-            <div className="mb-24 mt-8">
+          <div className="flex flex-col w-full">
+            <div className="mb-12 mt-8 line-clamp-3">
               <Link href={`/products/${id}`}>
-                <p className="text-neutral-400 text-xl cursor-pointer">
+                <p className="text-neutral-400 text-md cursor-pointer ">
                   {title}
                 </p>
               </Link>
             </div>
             {/* RATING ROW */}
-            <div className="flex justify-between mb-10">
+            <div className="flex justify-end mb-4">
               <Rating rating={rating} />
-              <Link className="more__info" href={`/products/${id}`}>
-                <p className=" cursor-pointer text-secondary-600 hover-hover:hover:text-secondary-500 transition-all">
+            </div>
+
+            {/* PRICE ROW */}
+            <div className="flex justify-between items-center mb-8">
+              <p className="text-secondary-400 text-lg tracking-wider  text-neutral-400 ">
+                {formatCurrency(price)}
+              </p>
+              <Link href={`/products/${id}`}>
+                <p className=" cursor-pointer text-secondary-600 hover-hover:hover:text-secondary-500 transition-all text-right">
                   More info
                 </p>
               </Link>
             </div>
-            {/* PRICE ROW */}
-            <div className="flex justify-between items-center">
-              <p className="text-secondary-400 text-lg tracking-wider  text-neutral-400 ">
-                {formatCurrency(price)}
-              </p>
-            </div>
-            <AddToCart product={props.product} />
+            {/* <AddToCart product={props.product} /> */}
+            <Button
+              onClick={() => addToCart(props.product, 1)}
+              text="Add to cart"
+              type="primary"
+              size="lg"
+              textSize="md"
+              padding="4"
+              width="full"
+              icon={<IoCartOutline className="w-8 h-8" />}
+            />
           </div>
         </div>
         <ImageModal open={open} product={props.product} onClose={closeModal} />

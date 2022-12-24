@@ -4,9 +4,10 @@ import React from "react";
 import * as ReactDOM from "react-dom";
 import { formatCurrency } from "../utilities/formatCurrency";
 import Backdrop from "./Backdrop";
+import CloseButton from "./CloseButton";
 
-export default function ImageModal(props) {
-  if (!props.open) return null;
+export default function ImageModal({ open, onClose, product }) {
+  if (!open) return null;
 
   const {
     id,
@@ -17,7 +18,7 @@ export default function ImageModal(props) {
     image,
     rating,
     displayElement,
-  } = props.product;
+  } = product;
 
   return ReactDOM.createPortal(
     <>
@@ -34,15 +35,12 @@ export default function ImageModal(props) {
               <Link href={`/products/${id}`}>Go to product&apos;s page</Link>
             </div>
           </div>
-          <span
-            className="py-4 px-6 absolute top-0 left-full -translate-x-full scale-150 origin-center"
-            onClick={props.onClose}
-          >
-            <i className="fa fa-close text-neutral-400" />
-          </span>
+          <div className="absolute top-4 left-[calc(100%-1rem)] -translate-x-full scale-150 origin-center">
+            <CloseButton onClick={onClose} />
+          </div>
         </div>
       </div>
-      <Backdrop onClose={props.onClose} zIndex={10} />
+      <Backdrop onClose={onClose} zIndex={10} />
     </>,
 
     document.getElementById("modal-root")

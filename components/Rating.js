@@ -17,8 +17,11 @@ export default function Rating({
   return (
     <>
       {rateable ? (
-        <div className="flex items-center space-x-2">
-          <div onMouseLeave={() => changeUserRatingOnHover(Math.round(rate))}>
+        <div className="flex items-center">
+          <div
+            className="w-24"
+            onMouseLeave={() => changeUserRatingOnHover(Math.round(rate))}
+          >
             {stars.map((star) => (
               <Star
                 key={star.id}
@@ -31,14 +34,14 @@ export default function Rating({
               />
             ))}
           </div>
-          <span className="text-neutral-400">
+          <span className="text-neutral-400 text-sm">
             {rate}
             <span className="text-neutral-400 text-xs"> ({count})</span>
           </span>
         </div>
       ) : (
-        <div className="flex items-center space-x-2">
-          <div onClick={toggleAlreadyRatedMessage}>
+        <div className="flex items-center">
+          <div className="w-24" onClick={toggleAlreadyRatedMessage}>
             {stars.map((star) => (
               <Star
                 key={star.id}
@@ -49,7 +52,7 @@ export default function Rating({
             ))}
           </div>
           {!commentRating && (
-            <span className="text-neutral-400">
+            <span className="text-neutral-400 text-sm">
               {rate}
               <span className="text-neutral-400 text-xs"> ({count})</span>
             </span>

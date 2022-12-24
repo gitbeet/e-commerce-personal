@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import ProductCard from "../components/ProductCard";
 import SearchBar from "../components/SearchBar";
 import SelectMenu from "../components/SelectMenu";
-import { useProductData } from "../context/ProductDataContext";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import { ClipLoader } from "react-spinners";
 
 import db from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import Button from "../components/Button";
+import ProductsGrid from "../components/ProductsGrid";
 
 export default function Products({ prodData }) {
   const { changeUser } = useShoppingCart();
@@ -16,6 +14,7 @@ export default function Products({ prodData }) {
   const [initialProducts, setInitialProducts] = useState(prodData);
   const [currentCategory, setCurrentCategory] = useState("All products");
   const [currentOrder, setCurrentOrder] = useState("");
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     let prod = prodData.map((product) => {
@@ -81,7 +80,7 @@ export default function Products({ prodData }) {
       });
       setDisplayProducts(sortedProducts);
     }
-  }, [currentOrder, displayProducts]);
+  }, [currentOrder]);
 
   function assignCurrentCategory(value) {
     setCurrentCategory(value);
@@ -90,6 +89,10 @@ export default function Products({ prodData }) {
   function assignCurrentOrder(value) {
     setCurrentOrder(value);
   }
+
+  useEffect(() => {
+    handleSearch(input);
+  }, [input]);
 
   function handleSearch(value) {
     setDisplayProducts((prev) =>
@@ -108,7 +111,11 @@ export default function Products({ prodData }) {
     <div className="px-[5%] py-10 space-y-12">
       {/* SEARCH BAR */}
       <div className="space-y-10">
-        <SearchBar placeholder="Search our products" onChange={handleSearch} />
+        <SearchBar
+          placeholder="Search our products"
+          onChange={setInput}
+          value={input}
+        />
 
         <div className="flex items-end space-x-6 lg:justify-between lg:space-x-0">
           {/* MOBILE CATEGORIES */}
@@ -199,12 +206,7 @@ export default function Products({ prodData }) {
         </div>
       </div>
       {/* <div className="md:gap-8  md:flex flex-wrap justify-center items-stretch"> */}
-      <div className="products-grid">
-        {displayProducts &&
-          displayProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-      </div>
+      <ProductsGrid products={displayProducts} />
     </div>
   );
 }
