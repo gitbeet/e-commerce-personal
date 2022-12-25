@@ -40,16 +40,18 @@ export default function ProductCard(props) {
           } min-w-[9.75rem] flex-col justify-between items-center border border-neutral-800 rounded-md  text-center p-6`}
         >
           {/* IMAGE */}
-          <div
-            onClick={openModal}
-            className="w-full overflow-hidden cursor-pointer"
-          >
-            <img
-              className=" hover-hover:hover:scale-105 transition-all duration-[400ms] ease-in-out"
-              src={image}
-              alt="product img"
-            />
-          </div>
+          <Link href={`/products/${id}`}>
+            <div
+              // onClick={openModal}
+              className="w-full overflow-hidden cursor-pointer"
+            >
+              <img
+                className=" hover-hover:hover:scale-105 transition-all duration-[400ms] ease-in-out"
+                src={image}
+                alt="product img"
+              />
+            </div>
+          </Link>
           {/* BODY */}
           <div className="flex flex-col w-full">
             <div className="mb-12 mt-8 line-clamp-3">
@@ -66,7 +68,7 @@ export default function ProductCard(props) {
 
             {/* PRICE ROW */}
             <div className="flex justify-between items-center mb-8">
-              <p className="text-secondary-400 text-lg tracking-wider  text-neutral-400 ">
+              <p className="text-secondary-400 text-lg tracking-wider  text-neutral-400 font-bold ">
                 {formatCurrency(price)}
               </p>
               <Link href={`/products/${id}`}>

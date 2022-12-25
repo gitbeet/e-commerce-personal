@@ -22,7 +22,7 @@ const SearchComponent = () => {
   useEffect(() => {
     const performSearch = async (value) => {
       const { hits } = await index.search(value, {
-        hitsPerPage: 5,
+        hitsPerPage: 3,
       });
 
       const results = hits.map((hit) => {

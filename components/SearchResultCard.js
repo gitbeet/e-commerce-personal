@@ -6,7 +6,7 @@ const SearchResultCard = ({ product }) => {
   return (
     <div className="p-4 flex gap-8 border-b border-neutral-600">
       <Link href={`/products/${id}`}>
-        <img className="h-24 cursor-pointer" src={image} alt="img" />
+        <img className="h-16 cursor-pointer" src={image} alt="img" />
       </Link>
       <div>
         <Link href={`/products/${id}`}>

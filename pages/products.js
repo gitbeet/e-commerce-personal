@@ -108,7 +108,7 @@ export default function Products({ prodData }) {
   // if (error) return <h1>ERROR</h1>;
 
   return (
-    <div className="px-[5%] py-10 space-y-12">
+    <div className="pt-16 pb-32 space-y-12">
       {/* SEARCH BAR */}
       <div className="space-y-10">
         <SearchBar

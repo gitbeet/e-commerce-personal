@@ -12,7 +12,7 @@ export default function Nav() {
   const { toggleUserModal } = useModal();
 
   return (
-    <nav className="relative flex justify-between items-center px-4 pt-4 pb-6 border-b border-neutral-800 min-w-[100vw]">
+    <nav className="relative flex justify-between items-center px-4 pt-4 pb-6 border-b border-neutral-800 ">
       <div className="lg:hidden">
         <MobileMenuButton />
       </div>

@@ -4,7 +4,6 @@ import Meta from "./Meta";
 import MobileMenu from "./MobileMenu";
 import Nav from "./Nav";
 import ShoppingCartModal from "./ShoppingCartModal";
-import UserModal from "./UserModal";
 
 export default function Layout({ children }) {
   const {
@@ -18,7 +17,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="min-h-[100vh] flex flex-col ">
-      <div className="lg:w-[80%] mx-auto flex flex-col">
+      <div className="lg:w-[95%] mx-auto flex flex-col">
         <Meta />
         <Nav />
         <MobileMenu show={showMobileMenu} onClose={toggleMobileMenu} />

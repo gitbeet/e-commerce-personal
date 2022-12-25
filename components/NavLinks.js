@@ -8,23 +8,23 @@ export default function NavLinks({ hoverColor, size = "md" }) {
       <li
         className={`${hoverClass} "transition-all duration-[150] text-${size} `}
       >
-        <Link href="/">Home</Link>
+        <Link href="/">Home page</Link>
       </li>
       <li
         className={`${hoverClass} "transition-all duration-[150] text-${size} `}
       >
         <Link href="/products">Products</Link>
       </li>
-      <li
+      {/* <li
         className={`${hoverClass} "transition-all duration-[150] text-${size} `}
       >
         <Link href="/profile">Profile</Link>
-      </li>
-      <li
+      </li> */}
+      {/* <li
         className={`${hoverClass} "transition-all duration-[150] text-${size} `}
       >
         <Link href="/about">About</Link>
-      </li>
+      </li> */}
     </>
   );
 }
