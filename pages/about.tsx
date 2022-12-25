@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-export default function About() {
+const About = (): JSX.Element => {
   return (
     <div>
       <Head>
@@ -11,4 +11,6 @@ export default function About() {
       about
     </div>
   );
-}
+};
+
+export default About;

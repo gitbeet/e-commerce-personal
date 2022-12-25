@@ -5,10 +5,11 @@ import ProductDataProvider from "../context/ProductDataContext";
 import ShoppingCartProvider from "../context/ShoppingCartContext";
 import "../styles/globals.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppProps } from "next/app";
 
 export const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }) {
+const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -24,6 +25,6 @@ function MyApp({ Component, pageProps }) {
       </AuthProvider>
     </QueryClientProvider>
   );
-}
+};
 
 export default MyApp;

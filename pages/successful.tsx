@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import Link from "next/link";
 
-export default function SuccessfulRegister() {
+export default function SuccessfulRegister(): JSX.Element {
   const { user } = useAuth();
 
   return (

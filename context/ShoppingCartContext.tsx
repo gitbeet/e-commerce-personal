@@ -1,11 +1,31 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { useAuth } from "./AuthContext";
 import db from "../firebase/config";
 import { setDoc, getDoc, doc, getDocs } from "firebase/firestore";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { ShoppingCartProductInterface } from "Models";
 
-const shoppingCartContext = createContext();
+interface Props {
+  children?: ReactNode;
+}
+
+interface ShoppingCartContextInterface {
+  shoppingCart: ShoppingCartProductInterface[];
+  addToCart: (product: ShoppingCartProductInterface, quantity: number) => void;
+  removeItem: (id: string) => void;
+  changeQuantity: (id: string, operator: string) => void;
+}
+
+const shoppingCartContext = createContext<ShoppingCartContextInterface | null>(
+  null
+);
 
 export function useShoppingCart() {
   const context = useContext(shoppingCartContext);
@@ -13,10 +33,12 @@ export function useShoppingCart() {
   return context;
 }
 
-export default function ShoppingCartProvider({ children }) {
+export default function ShoppingCartProvider({ children }: Props): JSX.Element {
   const { user } = useAuth();
-  const [userData, setUserData] = useState("shoppingCart");
-  const [shoppingCart, setShoppingCart] = useState([]);
+  const [userData, setUserData] = useState<string>("shoppingCart");
+  const [shoppingCart, setShoppingCart] = useState<
+    ShoppingCartProductInterface[]
+  >([]);
 
   // useEffect(() => {
   //   if (!user) {
@@ -65,6 +87,7 @@ export default function ShoppingCartProvider({ children }) {
       return;
     }
     async function getInitialCartItems() {
+      if (!user) return;
       const cartItemsRef = doc(db, "users", user.uid);
       const cartItemsSnapshot = await getDoc(cartItemsRef);
       if (cartItemsSnapshot.exists()) {
@@ -81,10 +104,12 @@ export default function ShoppingCartProvider({ children }) {
     async function updateCart() {
       // const userDataRef = doc(db, "users", user.uid);
       try {
+        if (!user) return;
         await setDoc(doc(db, "users", user.uid), {
           shoppingCart,
         });
-      } catch (error) {
+        // ANY ??
+      } catch (error: any) {
         console.log(
           error.response && error.response.data.message
             ? error.response.data.message
@@ -131,7 +156,7 @@ export default function ShoppingCartProvider({ children }) {
   //   console.log(`SETTING ITEM ${shoppingCart.length}`);
   // }, [shoppingCart]);
 
-  function addToCart(prod, quantity) {
+  function addToCart(prod: ShoppingCartProductInterface, quantity: number) {
     if (quantity === 0) return;
     setShoppingCart((prev) => {
       return prev.length === 0
@@ -146,7 +171,7 @@ export default function ShoppingCartProvider({ children }) {
     });
   }
 
-  function changeQuantity(id, operator) {
+  function changeQuantity(id: string, operator: string) {
     setShoppingCart((prev) =>
       prev.map((product) => {
         return product.id === id
@@ -164,7 +189,7 @@ export default function ShoppingCartProvider({ children }) {
     );
   }
 
-  function removeItem(id) {
+  function removeItem(id: string) {
     setShoppingCart((prev) => prev.filter((item) => item.id !== id));
   }
 

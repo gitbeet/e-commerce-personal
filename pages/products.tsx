@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import SelectMenu from "../components/SelectMenu";
-
 import db from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import Button from "../components/Button";
 import ProductsGrid from "../components/ProductsGrid";
+import { ProductInterface } from "Models";
 
-export default function Products({ prodData }) {
+interface Props {
+  prodData: ProductInterface[];
+}
+
+export default function Products({ prodData }: Props) {
   const [displayProducts, setDisplayProducts] = useState(prodData);
   const [initialProducts, setInitialProducts] = useState(prodData);
   const [currentCategory, setCurrentCategory] = useState("All products");

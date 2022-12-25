@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../context/AuthContext";
-import Button from "../components/Button";
-import Link from "next/link";
-import Head from "next/head";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 
@@ -24,7 +21,7 @@ export default function Register() {
       .required("Can't be empty"),
   });
 
-  const onSubmit = (values) => {
+  const onSubmit = (values: any) => {
     console.log(values);
   };
 
@@ -35,16 +32,16 @@ export default function Register() {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
-    repeatPassword: "",
+    confirmPassword: "",
   });
 
   const [errorMessage, setErrorMessage] = useState({
     email: "",
     password: "",
-    repeatPassword: "",
+    confirmPassword: "",
   });
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setErrorMessage((prev) => {
       return { ...prev, [name]: "" };
@@ -55,8 +52,8 @@ export default function Register() {
   }
 
   async function handleSubmit() {
-    setErrorMessage("");
-    if (userData.password !== userData.repeatPassword) {
+    setErrorMessage(initialValues);
+    if (userData.password !== userData.confirmPassword) {
       setErrorMessage((prev) => {
         return { ...prev, password: "Passwords do not match" };
       });
@@ -64,7 +61,7 @@ export default function Register() {
     try {
       await register(userData.email, userData.password);
       router.push("../successful");
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === "auth/invalid-email") {
         console.log(error.code);
         setErrorMessage((prev) => {

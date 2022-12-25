@@ -5,15 +5,17 @@ import { useAuth } from "../context/AuthContext";
 import Button from "../components/Button";
 import Link from "next/link";
 
-export default function Login() {
+const Login = (): JSX.Element => {
   const router = useRouter();
 
   const { login, user, signout } = useAuth();
 
-  const [userData, setUserData] = useState({ email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState("");
+  const [userData, setUserData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setUserData((prev) => {
       return { ...prev, [name]: value };
@@ -25,7 +27,8 @@ export default function Login() {
     try {
       await login(userData.email, userData.password);
       router.back();
-    } catch (error) {
+      // ANY ?!?!
+    } catch (error: any) {
       if (error.code === "auth/invalid-email") {
         setErrorMessage("You have enetered an invalid email");
       }
@@ -107,4 +110,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-export default function Profile() {
+export default function Profile(): JSX.Element {
   const { signout, user } = useAuth();
 
   const router = useRouter();
@@ -36,8 +36,8 @@ export default function Profile() {
           <h1 className="text-center py-6">Profile page</h1>
           {/* not sure if working or not */}
           <div>
-            {user.photoUrl ? (
-              <img src={user.photoUrl} alt="user avatar" />
+            {user.photoURL ? (
+              <img src={user.photoURL} alt="user avatar" />
             ) : (
               <svg
                 width={60}

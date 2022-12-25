@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { DisplayProductInterface } from "Models";
 import Link from "next/link";
 import React from "react";
 import * as ReactDOM from "react-dom";
@@ -6,19 +7,20 @@ import { formatCurrency } from "../utilities/formatCurrency";
 import Backdrop from "./Backdrop";
 import CloseButton from "./CloseButton";
 
-export default function ImageModal({ open, onClose, product }) {
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  product: DisplayProductInterface;
+}
+
+export default function ImageModal({
+  open,
+  onClose,
+  product,
+}: Props): JSX.Element | null {
   if (!open) return null;
 
-  const {
-    id,
-    title,
-    description,
-    price,
-    category,
-    image,
-    rating,
-    displayElement,
-  } = product;
+  const { id, title, description, price, image } = product;
 
   return ReactDOM.createPortal(
     <>
@@ -40,9 +42,9 @@ export default function ImageModal({ open, onClose, product }) {
           </div>
         </div>
       </div>
-      <Backdrop onClose={onClose} zIndex={10} />
+      <Backdrop onClose={onClose} zIndex="10" />
     </>,
 
-    document.getElementById("modal-root")
+    document.getElementById("modal-root") as Element | DocumentFragment
   );
 }

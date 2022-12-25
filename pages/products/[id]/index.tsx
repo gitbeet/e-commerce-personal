@@ -129,7 +129,7 @@ export default function Product({ product }: Props): JSX.Element {
       { merge: true }
     );
     await updateDoc(docRef, {
-      ratedBy: arrayUnion({ userId: user.uid, rating: userRating }),
+      ratedBy: arrayUnion({ userId: user?.uid, rating: userRating }),
     });
   }
 
@@ -152,8 +152,8 @@ export default function Product({ product }: Props): JSX.Element {
     const docRef = doc(db, "productsList", id);
     await updateDoc(docRef, {
       comments: arrayUnion({
-        user: user.email,
-        userId: user.uid,
+        user: user?.email,
+        userId: user?.uid,
         text: commentText,
         id: uuid(),
       }),
@@ -257,7 +257,7 @@ export default function Product({ product }: Props): JSX.Element {
                 <Rating
                   userRating={userRating}
                   rating={rating}
-                  rateable={user && !ratedByUser}
+                  rateable={(user && !ratedByUser) || false}
                   rateProduct={rateProductMutate}
                   changeUserRatingOnHover={changeUserRatingOnHover}
                   toggleAlreadyRatedMessage={toggleAlreadyRatedMessage}

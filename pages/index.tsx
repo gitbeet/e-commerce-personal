@@ -1,10 +1,6 @@
 import Head from "next/head";
-import SearchBar from "../components/SearchBar";
 import SearchComponent from "../components/SearchComponent";
-import { useAuth } from "../context/AuthContext";
-export default function Home() {
-  const { user } = useAuth();
-
+export default function Home(): JSX.Element {
   return (
     <div>
       <Head>
