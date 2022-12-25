@@ -64,9 +64,14 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
-    "components/UserModal.js"
+    "**/*.tsx"
   ],
-  "exclude": ["node_modules"],
-  "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  "exclude": [
+    "node_modules"
+  ],
+  "plugins": [
+    {
+      "name": "typescript-plugin-css-modules"
+    }
+  ]
 }
