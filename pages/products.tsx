@@ -5,26 +5,31 @@ import db from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import Button from "../components/Button";
 import ProductsGrid from "../components/ProductsGrid";
-import { ProductInterface } from "Models";
+import { DisplayProductInterface, ProductInterface } from "Models";
 
 interface Props {
   prodData: ProductInterface[];
 }
 
-export default function Products({ prodData }: Props) {
-  const [displayProducts, setDisplayProducts] = useState(prodData);
-  const [initialProducts, setInitialProducts] = useState(prodData);
-  const [currentCategory, setCurrentCategory] = useState("All products");
-  const [currentOrder, setCurrentOrder] = useState("");
-  const [input, setInput] = useState("");
-
-  useEffect(() => {
-    let prod = prodData.map((product) => {
+const Products = ({ prodData }: Props) => {
+  const [displayProducts, setDisplayProducts] = useState<
+    DisplayProductInterface[]
+  >(
+    prodData.map((product) => {
       return { ...product, displayElement: true };
-    });
-    setDisplayProducts(prod);
-    setInitialProducts(prod);
-  }, [prodData]);
+    })
+  );
+  const [initialProducts, setInitialProducts] = useState<
+    DisplayProductInterface[]
+  >(
+    prodData.map((product) => {
+      return { ...product, displayElement: true };
+    })
+  );
+  const [currentCategory, setCurrentCategory] =
+    useState<string>("All products");
+  const [currentOrder, setCurrentOrder] = useState<string>("");
+  const [input, setInput] = useState<string>("");
 
   useEffect(() => {
     if (currentCategory === "All products") {
@@ -84,11 +89,11 @@ export default function Products({ prodData }: Props) {
     }
   }, [currentOrder]);
 
-  function assignCurrentCategory(value) {
+  function assignCurrentCategory(value: string) {
     setCurrentCategory(value);
   }
 
-  function assignCurrentOrder(value) {
+  function assignCurrentOrder(value: string) {
     setCurrentOrder(value);
   }
 
@@ -96,7 +101,7 @@ export default function Products({ prodData }: Props) {
     handleSearch(input);
   }, [input]);
 
-  function handleSearch(value) {
+  function handleSearch(value: string) {
     setDisplayProducts((prev) =>
       prev.map((product) =>
         product.title.toLowerCase().includes(value.toLowerCase())
@@ -211,7 +216,7 @@ export default function Products({ prodData }: Props) {
       <ProductsGrid products={displayProducts} />
     </div>
   );
-}
+};
 
 export const getServerSideProps = async () => {
   const productsCollectionRef = collection(db, "productsList");
@@ -224,3 +229,5 @@ export const getServerSideProps = async () => {
     },
   };
 };
+
+export default Products;

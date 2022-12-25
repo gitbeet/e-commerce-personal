@@ -4,7 +4,7 @@ interface Props {
   onClick: () => void;
   text: string;
   type?: string;
-  size: string;
+  size?: string;
   disabled?: boolean;
   padding?: string;
   textSize?: string;
@@ -19,7 +19,7 @@ const Button = ({
   onClick,
   text,
   type = "primary",
-  size,
+  size = "lg",
   disabled = false,
   padding = "6",
   textSize = "md",
