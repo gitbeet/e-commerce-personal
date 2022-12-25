@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import SelectMenu from "../components/SelectMenu";
-import { useShoppingCart } from "../context/ShoppingCartContext";
 
 import db from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
@@ -9,7 +8,6 @@ import Button from "../components/Button";
 import ProductsGrid from "../components/ProductsGrid";
 
 export default function Products({ prodData }) {
-  const { changeUser } = useShoppingCart();
   const [displayProducts, setDisplayProducts] = useState(prodData);
   const [initialProducts, setInitialProducts] = useState(prodData);
   const [currentCategory, setCurrentCategory] = useState("All products");
