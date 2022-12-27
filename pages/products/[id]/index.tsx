@@ -5,6 +5,8 @@ import { formatCurrency } from "../../../utilities/formatCurrency";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../../context/AuthContext";
+import { useRouter } from "next/router";
+import { GetServerSideProps } from "next/types";
 import db from "../../../firebase/config";
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import SimilarProductsList from "../../../components/SimilarProductsList";
@@ -12,8 +14,6 @@ import CommentsList from "../../../components/CommentsList";
 import Button from "../../../components/Button";
 import Rating from "../../../components/Rating";
 import AddToCart from "../../../components/AddToCart";
-import { useRouter } from "next/router";
-import { GetServerSideProps } from "next/types";
 import {
   CommentInterface,
   ProductInterface,

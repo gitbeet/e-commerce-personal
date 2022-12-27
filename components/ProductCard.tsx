@@ -7,10 +7,10 @@ import ImageModal from "./ImageModal";
 import Link from "next/link";
 import Button from "./Button";
 import { IoCartOutline } from "react-icons/io5";
-import { ProductInterface } from "Models";
+import { DisplayProductInterface } from "Models";
 
 interface Props {
-  product: ProductInterface;
+  product: DisplayProductInterface;
 }
 
 const ProductCard = ({ product }: Props): JSX.Element => {
@@ -29,13 +29,13 @@ const ProductCard = ({ product }: Props): JSX.Element => {
         <div
           className={`${
             displayElement ? "flex" : "hidden"
-          } min-w-[9.75rem] flex-col justify-between items-center border border-neutral-800 rounded-md  text-center p-6`}
+          }  flex-col justify-between items-center border border-neutral-800 rounded-md  text-center p-6 saturate-0`}
         >
           {/* IMAGE */}
           <Link href={`/products/${id}`}>
             <div
               // onClick={openModal}
-              className="w-full overflow-hidden cursor-pointer"
+              className="max-w-full overflow-hidden cursor-pointer"
             >
               <img
                 className=" hover-hover:hover:scale-105 transition-all duration-[400ms] ease-in-out"
@@ -45,7 +45,7 @@ const ProductCard = ({ product }: Props): JSX.Element => {
             </div>
           </Link>
           {/* BODY */}
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col max-w-full">
             <div className="mb-12 mt-8 line-clamp-3">
               <Link href={`/products/${id}`}>
                 <p className="text-neutral-400 text-md cursor-pointer ">

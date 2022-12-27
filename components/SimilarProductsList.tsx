@@ -6,7 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import SimilarProduct from "./SimilarProduct";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, limit, query, where } from "firebase/firestore";
 import db from "../firebase/config";
 import { ProductInterface } from "Models";
 
@@ -31,9 +31,9 @@ const SimilarProductsList = ({ category, productId }: Props): JSX.Element => {
   useEffect(() => {
     async function getSimilarProducts() {
       const similarProductsQuery = query(
-        collection(db, "productsList")
-        // fetching all for now for slider test
-        // where("category", "==", category)
+        collection(db, "productsList"),
+        where("category", "==", category),
+        limit(10)
       );
       const similarProductsSnapshot = await getDocs(similarProductsQuery);
 
@@ -50,7 +50,7 @@ const SimilarProductsList = ({ category, productId }: Props): JSX.Element => {
   if (!similarProducts) return <h1>loading...</h1>;
   return (
     <Swiper
-      loop={true}
+      loop={false}
       modules={[Navigation, Pagination, Scrollbar, A11y]}
       navigation
       spaceBetween={10}

@@ -27,7 +27,7 @@ const SearchBar = ({
     <div
       className={`relative flex min-w-full justify-between items-center space-x-2  border ${
         focus ? "border-primary-600" : "border-neutral-600"
-      } rounded-md px-2`}
+      } rounded-full px-2`}
     >
       <svg
         className={` ${
@@ -48,6 +48,7 @@ const SearchBar = ({
         onSubmit={(e) => onSubmitFunc(e)}
       >
         <input
+          className="w-full"
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}

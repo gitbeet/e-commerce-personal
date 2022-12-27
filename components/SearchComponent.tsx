@@ -49,19 +49,23 @@ const SearchComponent = (): JSX.Element => {
   }, [debouncedValue]);
 
   return (
-    <div>
-      <SearchBar
-        value={input}
-        placeholder="Search a product"
-        onChange={setInput}
-      />
-      {debouncedValue && (
-        <div>
-          {results.map((result) => (
-            <SearchResultCard key={result.id} product={result} />
-          ))}
-        </div>
-      )}
+    <div className="relative w-full">
+      <div>
+        <SearchBar
+          value={input}
+          placeholder="Search a product"
+          onChange={setInput}
+        />
+      </div>
+      <div className="absolute top-16 z-[100] w-full shadow-lg bg-neutral-900">
+        {debouncedValue && (
+          <div onClick={() => setInput("")}>
+            {results.map((result) => (
+              <SearchResultCard key={result.id} product={result} />
+            ))}
+          </div>
+        )}
+      </div>
       {debouncedValue && results.length < 1 ? (
         <p className="text-xl">Nothing found.</p>
       ) : null}

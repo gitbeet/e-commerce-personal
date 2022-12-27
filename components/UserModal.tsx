@@ -15,15 +15,11 @@ const UserModal = ({ position }: Props): JSX.Element | null => {
   const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
-    console.log(top, left);
-  }, [position]);
-
-  useEffect(() => {
     setIsBrowser(true);
   }, []);
 
-  let top = `top-[${(((position && position[1]) || 0) + 50).toString()}px]`;
-  let left = `left-[${(((position && position[0]) || 0) - 100).toString()}px]`;
+  // let top = `top-[${(((position && position[1]) || 0) + 50).toString()}px]`;
+  // let left = `left-[${(((position && position[0]) || 0) - 100).toString()}px]`;
 
   if (isBrowser) {
     return ReactDOM.createPortal(

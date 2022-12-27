@@ -212,7 +212,6 @@ const Products = ({ prodData }: Props) => {
           </div>
         </div>
       </div>
-      {/* <div className="md:gap-8  md:flex flex-wrap justify-center items-stretch"> */}
       <ProductsGrid products={displayProducts} />
     </div>
   );

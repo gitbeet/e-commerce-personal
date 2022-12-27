@@ -3,64 +3,51 @@ import Image from "next/image";
 import Link from "next/link";
 import DropDownMenu from "./DropDownMenu";
 import MobileMenuButton from "./MobileMenuButton";
+import SearchComponent from "./SearchComponent";
 import ShoppingCartNav from "./ShoppingCartNav";
 import UserButton from "./UserButton";
 
 const Nav = (): JSX.Element => {
   return (
-    <nav className="relative flex justify-between items-center px-4 pt-4 pb-6 border-b border-neutral-800 ">
-      <div className="lg:hidden">
-        <MobileMenuButton />
-      </div>
-      <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
-        <Link href="/">
-          <div className="cursor-pointer hidden lg:flex items-center">
-            <Image
-              src="/assets/logo.jpg"
-              alt="brand logo"
-              width={137}
-              height={40}
-            />
-          </div>
-        </Link>
-
-        <Link href="/">
-          <div className="cursor-pointer hidden  items-center md:flex lg:hidden">
-            <Image
-              src="/assets/logo.jpg"
-              alt="brand logo"
-              width={137}
-              height={40}
-            />
-          </div>
-        </Link>
-        <Link href="/">
-          <div className="flex items-center cursor-pointer  md:hidden bg-neutral-900">
-            <Image
-              src="/assets/logo-mobile.jpg"
-              alt="brand logo"
-              width={48}
-              height={40}
-            />
-          </div>
-        </Link>
-      </div>
-      <div className="hidden lg:block  mr-auto ml-12">
-        <ul className="flex  text-md uppercase tracking-widest space-x-4">
+    <nav className="relative border-b border-neutral-800 w-full px-4 pt-4 pb-6 space-y-8">
+      <div className=" flex justify-between items-center ">
+        <div className="lg:hidden">
+          <MobileMenuButton />
+        </div>
+        <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0">
+          <Link href="/">
+            <p className="cursor-pointer">Logo</p>
+          </Link>
+        </div>
+        <div className="hidden lg:block  mr-auto ml-12">
           <DropDownMenu
             header="Products"
             options={[
-              "Men's Clothing",
-              "Women's Clothing",
-              "Electronics",
-              "Jewelery",
+              {
+                title: "Clothing",
+                subMenuOptions: [
+                  { title: "Men's Clothing", subMenuOptions: [] },
+                  { title: "Women's Clothing", subMenuOptions: [] },
+                ],
+              },
+              { title: "Jewelery", subMenuOptions: [] },
+              { title: "Electronics", subMenuOptions: [] },
             ]}
           />
-        </ul>
+        </div>
+        <div className="w-full px-12 hidden md:block ">
+          <SearchComponent />
+        </div>
+        <div className="flex space-x-4">
+          <UserButton />
+          <ShoppingCartNav />
+        </div>
       </div>
-      <div className="flex space-x-4">
-        <UserButton />
-        <ShoppingCartNav />
+      <div
+        className="w-full   md:hidden
+       "
+      >
+        <SearchComponent />
       </div>
     </nav>
   );

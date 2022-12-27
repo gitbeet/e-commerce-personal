@@ -1,9 +1,9 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 import styles from "../styles/ProductsGrid.module.css";
-import { ProductInterface } from "../Models";
+import { DisplayProductInterface } from "../Models";
 interface Props {
-  products: ProductInterface[];
+  products: DisplayProductInterface[];
 }
 
 const ProductsGrid = ({ products }: Props) => {

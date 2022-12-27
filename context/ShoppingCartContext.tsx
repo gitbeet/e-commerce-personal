@@ -10,7 +10,7 @@ import { useAuth } from "./AuthContext";
 import db from "../firebase/config";
 import { setDoc, getDoc, doc, getDocs } from "firebase/firestore";
 import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { ShoppingCartProductInterface } from "Models";
+import { DisplayProductInterface, ShoppingCartProductInterface } from "Models";
 
 interface Props {
   children?: ReactNode;
@@ -18,7 +18,7 @@ interface Props {
 
 interface ShoppingCartContextInterface {
   shoppingCart: ShoppingCartProductInterface[];
-  addToCart: (product: ShoppingCartProductInterface, quantity: number) => void;
+  addToCart: (product: DisplayProductInterface, quantity: number) => void;
   removeItem: (id: string) => void;
   changeQuantity: (id: string, operator: string) => void;
 }
@@ -156,7 +156,7 @@ export default function ShoppingCartProvider({ children }: Props): JSX.Element {
   //   console.log(`SETTING ITEM ${shoppingCart.length}`);
   // }, [shoppingCart]);
 
-  function addToCart(prod: ShoppingCartProductInterface, quantity: number) {
+  function addToCart(prod: DisplayProductInterface, quantity: number) {
     if (quantity === 0) return;
     setShoppingCart((prev) => {
       return prev.length === 0

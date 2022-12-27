@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
-
 interface Props {
   onClick: () => void;
-  text: string;
+  text?: string;
   type?: string;
   size?: string;
   disabled?: boolean;
@@ -13,6 +12,7 @@ interface Props {
   focus?: boolean;
   width?: string;
   icon?: ReactNode | null;
+  iconPlacement?: string;
 }
 
 const Button = ({
@@ -21,13 +21,14 @@ const Button = ({
   type = "primary",
   size = "lg",
   disabled = false,
-  padding = "6",
+  padding = "8",
   textSize = "md",
   fontWeight = "semibold",
   shadow = true,
   focus = false,
   width = "fit",
   icon = null,
+  iconPlacement = "left",
 }: Props): JSX.Element => {
   // const paddingX = `px-${padding}`;
   return (
@@ -55,8 +56,20 @@ const Button = ({
           : ""
       } `}
     >
-      <div className="flex justify-center items-center space-x-4">
-        {icon && <span>{icon}</span>} <span>{text}</span>
+      <div className="flex justify-center items-center space-x-4 ">
+        {icon && iconPlacement === "left" && text ? (
+          <>
+            <span>{icon}</span> <span>{text}</span>
+          </>
+        ) : icon && iconPlacement === "right" && text ? (
+          <>
+            <span>{text}</span> <span>{icon}</span>
+          </>
+        ) : text && !icon ? (
+          <span>{text}</span>
+        ) : !text && icon ? (
+          <span>{icon}</span>
+        ) : null}
       </div>
     </button>
   );

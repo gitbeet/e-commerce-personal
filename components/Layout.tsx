@@ -19,7 +19,7 @@ const Layout = ({ children }: Props): JSX.Element => {
 
   return (
     <div className="min-h-[100vh] flex flex-col ">
-      <div className="lg:w-[95%] mx-auto flex flex-col">
+      <div className="w-full lg:w-[95%] mx-auto flex flex-col">
         <Meta
           title="E-shop online shop"
           keywords="shop,online,clothes,electronics,jewelery"

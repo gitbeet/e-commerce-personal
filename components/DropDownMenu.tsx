@@ -1,29 +1,64 @@
-import { useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { VscTriangleDown } from "react-icons/vsc";
 
 interface Props {
   header: string;
-  options: string[];
+  options: Options[];
+  expandToTheSide?: boolean;
 }
 
-const DropDownMenu = ({ header, options }: Props): JSX.Element => {
+interface Options {
+  title: string;
+  subMenuOptions: Options[];
+}
+
+const DropDownMenu = ({
+  header,
+  options,
+  expandToTheSide = false,
+}: Props): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isO, setIsO] = useState(false);
+
+  useEffect(() => {
+    if (isO) {
+      setIsOpen(true);
+      return;
+    }
+    const timer = setTimeout(() => setIsOpen(false), 700);
+    console.log(isO);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isO]);
+
   return (
     <div
-      onClick={() => setIsOpen((prev) => !prev)}
-      onMouseLeave={() => setIsOpen(false)}
+      onMouseLeave={() => setIsO(false)}
+      onMouseEnter={() => setIsO(true)}
       className="relative z-[1000]"
     >
-      <div className=" cursor-pointer text-primary-500 flex items-center">
+      <div className=" cursor-pointer text-neutral-200 flex items-center select-none">
         <div
-          className="flex space-x-2 justify-center items-center"
-          onMouseEnter={() => setIsOpen(true)}
+          onClick={() => {
+            setIsOpen((prev) => !prev);
+          }}
+          className="flex  space-x-2 justify-center items-center select-none"
+          onMouseEnter={() => {
+            setIsO(true);
+            setIsOpen(true);
+          }}
         >
-          <h1>{header}</h1>
+          <h1 className="text-sm">{header}</h1>
           <div
             className={`${
-              isOpen ? "-rotate-180" : ""
-            } transition-transform duration-[0.25s]`}
+              isOpen && expandToTheSide
+                ? "-rotate-90"
+                : isOpen && !expandToTheSide
+                ? "-rotate-180"
+                : ""
+            } transition-transform duration-[0.35s]`}
           >
             <VscTriangleDown />
           </div>
@@ -34,13 +69,34 @@ const DropDownMenu = ({ header, options }: Props): JSX.Element => {
           isOpen
             ? "opacity-100 scale-y-100 origin-top"
             : "opacity-0 scale-y-0 pointer-events-none origin-top"
-        } absolute bg-neutral-900 -translate-x-4  p-6  w-max space-y-6 shadow-lg transition-all duration-[0.25s]`}
+        } absolute ${
+          expandToTheSide ? "left-full pb-6 top-0 " : " py-6 -translate-x-4"
+        } bg-neutral-900 pl-4  w-48 space-y-6   shadow-lg transition-all duration-[0.35s]`}
       >
-        {options.map((option) => (
-          <p className="cursor-pointer hover-hover:hover:text-neutral-400">
-            {option}
-          </p>
-        ))}
+        {options.map((option) => {
+          return option.subMenuOptions.length < 1 ? (
+            <Link
+              href={`/categories/${
+                option.title.toLowerCase()
+                // .replaceAll(" ", "-")
+                // .replaceAll("'", "")
+              }`}
+              key={option.title}
+            >
+              <p className="text-sm cursor-pointer hover-hover:hover:text-neutral-400">
+                {option.title}
+              </p>
+            </Link>
+          ) : (
+            <>
+              <DropDownMenu
+                expandToTheSide={true}
+                header={option.title}
+                options={option.subMenuOptions}
+              />
+            </>
+          );
+        })}
       </div>
     </div>
   );
