@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import { ProductInterface } from "../Models";
+import { DisplayProductInterface, ProductInterface } from "../Models";
 import Button from "./Button";
 import SmallButton from "./SmallButton";
 
 interface Props {
-  product: ProductInterface;
+  product: DisplayProductInterface;
 }
 
 const AddToCart = ({ product }: Props): JSX.Element => {
