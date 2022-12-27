@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import { DisplayProductInterface, ProductInterface } from "../Models";
+import { DisplayProductInterface } from "../Models";
 import Button from "./Button";
 import SmallButton from "./SmallButton";
 
