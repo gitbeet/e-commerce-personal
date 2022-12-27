@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Image from "next/image";
 import Link from "next/link";
 import DropDownMenu from "./DropDownMenu";
 import MobileMenuButton from "./MobileMenuButton";

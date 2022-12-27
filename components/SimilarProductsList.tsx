@@ -26,7 +26,7 @@ const SimilarProductsList = ({ category, productId }: Props): JSX.Element => {
   const [similarProducts, setSimilarProducts] = useState<ProductInterface[]>(
     []
   );
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   useEffect(() => {
     async function getSimilarProducts() {
