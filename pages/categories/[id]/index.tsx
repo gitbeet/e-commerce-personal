@@ -11,18 +11,15 @@ import {
   startAfter,
   where,
 } from "@firebase/firestore";
-import algoliasearch from "algoliasearch/lite";
-import ProductCard from "components/ProductCard";
 import db from "../../../firebase/config";
-import { DisplayProductInterface } from "Models";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import styles from "../../../styles/ProductsGrid.module.css";
-import { useEffect, useRef, useState } from "react";
-import { endsWith, first } from "lodash";
+import { useEffect, useState } from "react";
 import ProductsGrid from "components/ProductsGrid";
 import Button from "components/Button";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import ScrollToTopElement from "components/ScrollToTopElement";
+import OrderByComponent from "components/OrderByComponent";
+import FiltersComponent from "components/FiltersComponent";
 
 const HITS_PER_PAGE = 12;
 
@@ -34,32 +31,42 @@ const Category = () => {
     useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [lastItem, setLastItem] =
     useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  // ANY !!!!
   const [products, setProducts] = useState<any[]>([]);
-  const [page, setPage] = useState(1);
-  const router = useRouter();
-  const { id } = router.query;
 
-  const scrollToTopRef = useRef<HTMLDivElement | null>(null);
+  const [order, setOrder] = useState<string>("");
+
+  const router = useRouter();
+  const { id: currentCategory } = router.query;
 
   useEffect(() => {
-    if (!scrollToTopRef.current) return;
-    scrollToTopRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [products]);
+    orderProducts();
+  }, [order]);
 
   useEffect(() => {
     getInitialProducts();
     setFirstPage(true);
     setLastPage(false);
-  }, [id]);
-
-  useEffect(() => {}, [page]);
+  }, [currentCategory]);
 
   const getNextPage = async () => {
     const collectionRef = collection(db, "productsList");
     const productQuery = query(
       collectionRef,
-      where("category", "==", id),
-      orderBy("id"),
+      order === "onSale"
+        ? (where("discount", "!=", 0), where("category", "==", currentCategory))
+        : where("category", "==", currentCategory),
+      order === "priceDesc"
+        ? orderBy("price", "desc")
+        : order === "priceAsc"
+        ? orderBy("price", "asc")
+        : order === "rating"
+        ? orderBy("rating.rate", "desc")
+        : order === "ratingCount"
+        ? orderBy("rating.count", "desc")
+        : order === "onSale"
+        ? orderBy("discount", "desc")
+        : orderBy("id"),
       startAfter(lastItem),
       limit(HITS_PER_PAGE)
     );
@@ -89,8 +96,20 @@ const Category = () => {
     const collectionRef = collection(db, "productsList");
     const productQuery = query(
       collectionRef,
-      where("category", "==", id),
-      orderBy("id"),
+      order === "onSale"
+        ? (where("discount", "!=", 0), where("category", "==", currentCategory))
+        : where("category", "==", currentCategory),
+      order === "priceDesc"
+        ? orderBy("price", "desc")
+        : order === "priceAsc"
+        ? orderBy("price", "asc")
+        : order === "rating"
+        ? orderBy("rating.rate", "desc")
+        : order === "ratingCount"
+        ? orderBy("rating.count", "desc")
+        : order === "onSale"
+        ? orderBy("discount", "desc")
+        : orderBy("id"),
       endBefore(firstItem),
       limitToLast(HITS_PER_PAGE)
     );
@@ -116,11 +135,11 @@ const Category = () => {
   };
 
   async function getInitialProducts() {
-    if (!id) return;
+    if (!currentCategory) return;
     const collectionRef = collection(db, "productsList");
     const productQuery = query(
       collectionRef,
-      where("category", "==", id),
+      where("category", "==", currentCategory),
       orderBy("id"),
       limit(HITS_PER_PAGE)
     );
@@ -136,17 +155,61 @@ const Category = () => {
     setProducts(products);
     setLastItem(lastVisible);
   }
-  const capitalizedTitle = id && id[0].toUpperCase() + id.slice(1);
+
+  async function orderProducts() {
+    if (!currentCategory) return;
+    const collectionRef = collection(db, "productsList");
+    const productQuery = query(
+      collectionRef,
+      order === "onSale"
+        ? (where("discount", "!=", 0), where("category", "==", currentCategory))
+        : where("category", "==", currentCategory),
+      order === "priceDesc"
+        ? orderBy("price", "desc")
+        : order === "priceAsc"
+        ? orderBy("price", "asc")
+        : order === "rating"
+        ? orderBy("rating.rate", "desc")
+        : order === "ratingCount"
+        ? orderBy("rating.count", "desc")
+        : order === "onSale"
+        ? orderBy("discount", "desc")
+        : orderBy("id"),
+      limit(HITS_PER_PAGE)
+    );
+
+    const productsSnapshot = await getDocs(productQuery);
+
+    const products = productsSnapshot.docs
+      .map((doc) => doc.data())
+      .map((product) => ({ ...product, displayElement: true }));
+
+    const lastVisible = productsSnapshot.docs[productsSnapshot.docs.length - 1];
+    setProducts(products);
+    setLastItem(lastVisible);
+    setFirstItem(null);
+    setFirstPage(true);
+    setLastPage(false);
+  }
+
+  const categoryHeader =
+    currentCategory &&
+    currentCategory[0].toUpperCase() + currentCategory.slice(1);
   return (
     <>
-      <div
-        ref={scrollToTopRef}
-        className="absolute top-0 left-1/2 bg-secondary-500 w-4 h-4"
-      ></div>
-      <div className="pt-16 pb-32 space-y-12">
+      <ScrollToTopElement scrollTrigger={products} />
+      <div className="pt-8 pb-32 space-y-8 first-letter:">
         <button onClick={() => router.back()}>Go Back</button>
-        <h1 className="text-5xl w-full text-center ">{capitalizedTitle}</h1>
-        <ProductsGrid products={products} />
+        <h1 className="text-4xl w-full text-left pb-8 ">{categoryHeader}</h1>
+        <div className="min-w-full flex flex-col md:flex-row md:space-x-16">
+          <div>
+            <FiltersComponent />
+          </div>
+          <div className="w-full space-y-8">
+            <OrderByComponent setOrder={setOrder} />
+            <ProductsGrid products={products} />
+          </div>
+        </div>
         <div className="hidden md:flex space-x-4 w-full  justify-center items-center">
           <Button
             text="Previous Page"

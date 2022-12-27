@@ -22,7 +22,8 @@ const ProductCard = ({ product }: Props): JSX.Element => {
   }
 
   if (product) {
-    const { id, title, price, image, rating, displayElement } = product;
+    const { id, title, price, image, rating, displayElement, discount } =
+      product;
 
     return (
       <>
@@ -31,17 +32,19 @@ const ProductCard = ({ product }: Props): JSX.Element => {
             displayElement ? "flex" : "hidden"
           }  flex-col justify-between items-center border border-neutral-800 rounded-md  text-center p-6 saturate-0`}
         >
+          {/* DISCOUNT */}
+          {discount !== 0 && (
+            <div className="absolute top-4 left-4 w-10 h-10 font-bold text-sm flex justify-center items-center bg-danger-500 text-neutral-900 rounded-full">
+              -{discount}%
+            </div>
+          )}
           {/* IMAGE */}
           <Link href={`/products/${id}`}>
             <div
               // onClick={openModal}
               className="max-w-full overflow-hidden cursor-pointer"
             >
-              <img
-                className=" hover-hover:hover:scale-105 transition-all duration-[400ms] ease-in-out"
-                src={image}
-                alt="product img"
-              />
+              <img src={image} alt="product img" />
             </div>
           </Link>
           {/* BODY */}

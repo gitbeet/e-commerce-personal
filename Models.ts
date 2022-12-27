@@ -26,6 +26,7 @@ export interface ProductInterface {
   ratedBy: RatedByInterface[];
   rating: RatingInterface;
   title: string;
+  discount: number;
 }
 
 export interface DisplayProductInterface {
@@ -39,6 +40,7 @@ export interface DisplayProductInterface {
   rating: RatingInterface;
   title: string;
   displayElement: boolean;
+  discount: number;
 }
 
 export interface ShoppingCartProductInterface {
@@ -52,6 +54,7 @@ export interface ShoppingCartProductInterface {
   rating: RatingInterface;
   title: string;
   quantity: number;
+  discount: number;
 }
 
 export interface AlgoliaResultInterface {

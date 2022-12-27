@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 interface Props {
   onClick: () => void;
   text?: string;
-  type?: string;
+  type?: "primary" | "secondary" | "ghost";
   size?: string;
   disabled?: boolean;
   padding?: string;
@@ -36,7 +36,7 @@ const Button = ({
       disabled={disabled}
       tabIndex={0}
       onClick={onClick}
-      className={`disabled:opacity-50   w-${width} text-${textSize} font-${fontWeight} rounded-md ${
+      className={`disabled:opacity-50 border   w-${width} text-${textSize} font-${fontWeight} rounded-md ${
         shadow ? "shadow-lg" : ""
       } transition-all duration-[200ms] whitespace-nowrap ${
         size === "sm" ? `px-${padding} py-2` : `px-${padding} py-3`
